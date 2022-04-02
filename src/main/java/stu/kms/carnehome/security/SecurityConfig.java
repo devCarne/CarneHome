@@ -1,5 +1,6 @@
 package stu.kms.carnehome.security;
 
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,10 +25,10 @@ import javax.sql.DataSource;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
+    @Setter(onMethod_ = @Autowired)
     private DataSource dataSource;
 
-    @Autowired
+    @Setter(onMethod_ = @Autowired)
     private UserDetailsService customUserDetailsService;
 
     @Bean

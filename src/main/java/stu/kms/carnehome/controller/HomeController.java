@@ -1,13 +1,11 @@
 package stu.kms.carnehome.controller;
 
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,14 +15,12 @@ import stu.kms.carnehome.domain.AuthVO;
 import stu.kms.carnehome.domain.MemberVO;
 import stu.kms.carnehome.service.MemberService;
 
-import java.awt.*;
-
 @Controller
 @Slf4j
 @RequestMapping("/*")
 public class HomeController {
 
-    @Autowired
+    @Setter(onMethod_ = @Autowired)
     private MemberService service;
 
     @GetMapping("/")
