@@ -30,7 +30,7 @@
     </resultMap>
 
     <select id="loadUser" resultMap="memberMap">
-        select mem.USERID, USERPW, USERNAME, ENABLED, REGDATE, UPDATEDATE, AUTH
+        select mem.USERID, USERPW, USERNAME, USERMAIL, ENABLED, REGDATE, UPDATEDATE, AUTH
         from CARNEHOME_MEMBER mem
         left outer join CARNEHOME_MEMBER_AUTH auth on mem.USERID = auth.USERID
         where mem.USERID = #{userid}

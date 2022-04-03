@@ -44,7 +44,7 @@
 <div class="container">
     <div class="row">
         <div class="col py-3 mb-4 border-bottom">
-            <h1 class="h2">게시판</h1>
+            <h2>게시판</h2>
         </div>
     </div>
 
@@ -69,7 +69,7 @@
                         </td>
                             <%--                제목--%>
                         <td>
-                            <a class="move" href="<c:out value='${post.postNo}'/>">
+                            <a class="post-link" href="<c:out value='${post.postNo}'/>">
                                 <c:out value="${post.title}"/>
                                 <b>
                                     [<c:out value="${post.replyCount}"/>]
@@ -101,23 +101,23 @@
             <div class="col-2">
                 <select class="form-select" name="searchType">
                     <option value="T" <c:out
-                            value="${pageData.pageVO.searchType == 'T'?'selected':''}"/>>제목
+                            value="${pageDTO.pageVO.searchType == 'T'?'selected':''}"/>>제목
                     </option>
                     <option value="C" <c:out
-                            value="${pageData.pageVO.searchType == 'C'?'selected':''}"/>>내용
+                            value="${pageDTO.pageVO.searchType == 'C'?'selected':''}"/>>내용
                     </option>
                     <option value="TC" <c:out
-                            value="${pageData.pageVO.searchType == 'TC'?'selected':''}"/>>제목/내용
+                            value="${pageDTO.pageVO.searchType == 'TC'?'selected':''}"/>>제목/내용
                     </option>
                     <option value="U" <c:out
-                            value="${pageData.pageVO.searchType == 'U'?'selected':''}"/>>작성자
+                            value="${pageDTO.pageVO.searchType == 'U'?'selected':''}"/>>작성자
                     </option>
                 </select>
             </div>
 
             <div class="col-6">
                 <input class="form-control form-control-dark" type="text" name="keyword"
-                       value="<c:out value='${pageData.pageVO.keyword}'/>" placeholder="Search"
+                       value="<c:out value='${pageDTO.pageVO.keyword}'/>" placeholder="Search"
                        aria-label="Search">
             </div>
 
@@ -135,21 +135,21 @@
             <%--페이징 버튼 표시--%>
             <%--a 하이퍼링크는 실제 동작하지 않고 JS에서 PageVOForm의 페이지를 자신이 가진 값으로 변경 시킨 후 동작하게 만든다.--%>
             <ul class="pagination justify-content-center">
-                <c:if test="${pageData.prevPageList}">
+                <c:if test="${pageDTO.prevPageList}">
                     <li class="page-item">
-                        <a class="page-link" href="${pageData.startPage - 1}">이전</a>
+                        <a class="page-link" href="${pageDTO.startPage - 1}">이전</a>
                     </li>
                 </c:if>
 
-                <c:forEach var="page" begin="${pageData.startPage}" end="${pageData.endPage}">
-                    <li class="page-item ${pageData.pageVO.pageNum == page ? 'active' : ''}">
+                <c:forEach var="page" begin="${pageDTO.startPage}" end="${pageDTO.endPage}">
+                    <li class="page-item ${pageDTO.pageVO.pageNum == page ? 'active' : ''}">
                         <a class="page-link" href="${page}">${page}</a>
                     </li>
                 </c:forEach>
 
-                <c:if test="${pageData.nextPageList}">
+                <c:if test="${pageDTO.nextPageList}">
                     <li class="page-item">
-                        <a class="page-link" href="${pageData.endPage + 1}">다음</a>
+                        <a class="page-link" href="${pageDTO.endPage + 1}">다음</a>
                     </li>
                 </c:if>
             </ul>
@@ -159,10 +159,10 @@
 
     <%--                PageVO 정보 전달 히든 폼--%>
     <form id="PageVOForm" action="/board/list" method="get">
-        <input type="hidden" id="pageNum" name="pageNum" value="${pageData.pageVO.pageNum}">
-        <input type="hidden" name="amountPerPage" value="${pageData.pageVO.amountPerPage}">
-        <input type="hidden" name="searchType" value="${pageData.pageVO.searchType}">
-        <input type="hidden" name="keyword" value="${pageData.pageVO.keyword}">
+        <input type="hidden" id="pageNum" name="pageNum" value="${pageDTO.pageVO.pageNum}">
+        <input type="hidden" name="amountPerPage" value="${pageDTO.pageVO.amountPerPage}">
+        <input type="hidden" name="searchType" value="${pageDTO.pageVO.searchType}">
+        <input type="hidden" name="keyword" value="${pageDTO.pageVO.keyword}">
     </form>
     <%--검색창--%>
 </body>
@@ -170,6 +170,17 @@
 <script>
     $(document).ready(function () {
 
+        let pageVOForm = $("#PageVOForm");
+        //게시물 조회 처리
+        $(".post-link").on("click", function (e) {
+            e.preventDefault();
+
+            pageVOForm.append("<input type='hidden' name='postNo' value='" + $(this).attr('href') + "'/>");
+            pageVOForm.attr("action", "/board/post");
+            pageVOForm.submit();
+        });
+
+        // 페이징 버튼 처리
         $(".page-link").on("click", function (e) {
             e.preventDefault();
             e.stopPropagation(); //부모 DOM 으로의 이벤트 전파를 중단
@@ -177,5 +188,7 @@
             $("#pageNum").val($(this).attr('href'));
             $("#PageVOForm").submit();
         });
+        // 페이징 버튼 처리
+
     });
 </script>

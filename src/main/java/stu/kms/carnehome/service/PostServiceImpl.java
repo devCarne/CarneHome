@@ -26,4 +26,9 @@ public class PostServiceImpl implements PostService{
     public Long getPostCount() {
         return mapper.getPostCount();
     }
+
+    @Override
+    public PostVO getPost(Long postNo) {
+        return mapper.getPost(postNo);
+    }
 }

@@ -34,4 +34,8 @@
     <select id="getPostCount" resultType="Long">
         select count(*) from CARNEHOME_POST where POSTNO > 0
     </select>
+
+    <select id="getPost" resultType="stu.kms.carnehome.domain.PostVO">
+        select * from CARNEHOME_POST where POSTNO = #{postNo}
+    </select>
 </mapper>
