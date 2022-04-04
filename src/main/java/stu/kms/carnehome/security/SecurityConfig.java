@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -30,6 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Setter(onMethod_ = @Autowired)
     private UserDetailsService customUserDetailsService;
+
+    @Setter(onMethod_ = @Autowired)
+    private AuthenticationFailureHandler customFailureHandler;
 
     @Bean
     public AuthenticationSuccessHandler successHandler() {
@@ -66,7 +70,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin()
                 .loginPage("/signIn")
                 .loginProcessingUrl("/login")
-                .successHandler(successHandler());
+                .successHandler(successHandler())
+                .failureHandler(customFailureHandler);
 
         http.logout()
                 .logoutUrl("/logout")

@@ -30,18 +30,18 @@
 
                         <div class="col-7">
                             <label for="userpw" class="form-label">비밀번호</label>
-                            <input type="password" class="form-control" id="userpw" name="userpw" required>
+                            <input type="password" class="form-control" id="userpw" name="userpw" required maxlength="30">
                         </div>
 
                         <div class="col-7">
-                            <label for="username" class="form-label">유저명(닉네임)</label>
-                            <input type="text" class="form-control" id="username" name="username" required>
+                            <label for="username" class="form-label">성함</label>
+                            <input type="text" class="form-control" id="username" name="username" required maxlength="100">
                         </div>
 
                         <div class="col-7">
                             <label for="usermail" class="form-label">이메일 <span class="text-muted">(선택)</span></label>
                             <input type="email" class="form-control" id="usermail" name="usermail"
-                                   placeholder="you@example.com">
+                                   placeholder="you@example.com" maxlength="100">
                         </div>
 
                         <div class="col-md-5">

@@ -125,6 +125,10 @@
                 <input class="btn btn-secondary" type="submit" onclick="return submitCheck()"
                        value="검색">
             </div>
+
+            <div class="col-1">
+                <button class="write-btn btn btn-primary" type="button">글쓰기</button>
+           </div>
         </div>
     </form>
     <%--검색창--%>
@@ -180,6 +184,11 @@
             pageVOForm.submit();
         });
 
+        // 글쓰기 버튼
+        $(".write-btn").on("click", function (e) {
+            self.location = "/board/write";
+        });
+
         // 페이징 버튼 처리
         $(".page-link").on("click", function (e) {
             e.preventDefault();
@@ -188,7 +197,5 @@
             $("#pageNum").val($(this).attr('href'));
             $("#PageVOForm").submit();
         });
-        // 페이징 버튼 처리
-
     });
 </script>

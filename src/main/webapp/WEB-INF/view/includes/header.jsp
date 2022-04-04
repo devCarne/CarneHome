@@ -44,48 +44,44 @@
     </symbol>
 </svg>
 
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
 <main>
-
-    <div class="b-example-divider"></div>
-
     <header class="p-3 bg-dark text-white">
         <div class="container">
-            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                    <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
-                </a>
+            <div class="row align-items-center">
+                <div class="col">
+                    <ul class="nav">
+                        <li><a href="/" class="nav-link px-2 text-white">홈으로</a></li>
+                        <li><a href="/board/list" class="nav-link px-2 text-white">게시판</a></li>
+                        <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
+                        <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+                        <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+                    </ul>
+                </div>
 
-                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="/" class="nav-link px-2 text-white">홈으로</a></li>
-                    <li><a href="/board/list" class="nav-link px-2 text-white">게시판</a></li>
-                    <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
-                    <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
-                    <li><a href="#" class="nav-link px-2 text-white">About</a></li>
-                </ul>
-
-                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                    <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
-                </form>
 
                 <sec:authorize access="isAnonymous()">
-                <div class="text-end">
+                <div class="col-2">
                     <button type="button" class="btn btn-outline-light me-2" id="signInBtn">로그인</button>
                     <button type="button" class="btn btn-warning" id="singUpBtn">회원가입</button>
                 </div>
                 </sec:authorize>
 
                 <sec:authorize access="isAuthenticated()">
-                <div class="text-end">
-                    <sec:authentication property="principal.member.username"/>님 안녕하세요.
+                <div class="col">
+                    <span><sec:authentication property="principal.member.username"/>님 안녕하세요.</span>
+                </div>
 
-                    <form role="form" method="post" action="/logout">
+                <div class="col-2">
+                    <form class="logout-form visually-hidden" role="form" method="post" action="/logout">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     </form>
-
                     <button type="button" class="btn btn-outline-light me-2" id="logoutBtn">로그아웃</button>
 <%--                    <button type="button" class="btn btn-warning" id="singUpBtn">회원정보 수정</button>--%>
                 </div>
                 </sec:authorize>
+
             </div>
         </div>
     </header>
@@ -97,15 +93,15 @@
     $(document).ready(function () {
 
         $("#singUpBtn").on("click", function () {
-            location.href = "signUp";
+            location.href = "/signUp";
         });
 
         $("#signInBtn").on("click", function () {
-            location.href = "signIn";
+            location.href = "/signIn";
         })
 
         $("#logoutBtn").on("click", function () {
-            $("form").submit();
+            $(".logout-form").submit();
             alert("로그아웃 하였습니다.");
         });
     });

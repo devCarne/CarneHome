@@ -44,6 +44,9 @@ dependencies {
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
     runtimeOnly group: 'org.aspectj', name: 'aspectjrt', version: '1.9.9'
     runtimeOnly group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.9'
+
+    implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.17'
+
 }
 
 tasks.named('test') {

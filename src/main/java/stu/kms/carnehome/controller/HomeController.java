@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import stu.kms.carnehome.domain.AuthVO;
 import stu.kms.carnehome.domain.MemberVO;
@@ -48,8 +46,13 @@ public class HomeController {
     }
 
     @GetMapping("/signIn")
-    public void signIn() {
+    public void signIn(
+            @RequestParam(value = "error", required = false)String error,
+            @RequestParam(value = "exception", required = false)String exception,
+            Model model) {
 
+        model.addAttribute("error", error);
+        model.addAttribute("exception", exception);
     }
 
     @GetMapping("/accessDenied")
