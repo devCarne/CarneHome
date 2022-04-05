@@ -7,7 +7,7 @@ import stu.kms.carnehome.domain.MemberVO;
 @Mapper
 public interface MemberMapper {
 
-    int signUp(MemberVO member);
+    void signUp(MemberVO member);
 
     int signUpAuth(AuthVO auth);
 

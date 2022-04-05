@@ -157,18 +157,40 @@
                     </li>
                 </c:if>
             </ul>
-            <%--                    페이징 버튼 표시--%>
+            <%--페이징 버튼 표시--%>
         </div>
     </div>
 
-    <%--                PageVO 정보 전달 히든 폼--%>
+    <%--모달--%>
+    <div class="modal" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel">처리 결과</h5>
+                </div>
+
+                <div class="modal-body">
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <%--모달--%>
+
+    <%--PageVO 정보 전달 히든 폼--%>
     <form id="PageVOForm" action="/board/list" method="get">
         <input type="hidden" id="pageNum" name="pageNum" value="${pageDTO.pageVO.pageNum}">
         <input type="hidden" name="amountPerPage" value="${pageDTO.pageVO.amountPerPage}">
         <input type="hidden" name="searchType" value="${pageDTO.pageVO.searchType}">
         <input type="hidden" name="keyword" value="${pageDTO.pageVO.keyword}">
     </form>
-    <%--검색창--%>
+    <%--PageVO 정보 전달 히든 폼--%>
 </body>
 
 <script>
@@ -197,5 +219,20 @@
             $("#pageNum").val($(this).attr('href'));
             $("#PageVOForm").submit();
         });
+
+        //모달
+        function showModal(result) {
+            if (result === '' || history.state) return;
+
+            let postNo = parseInt(result);
+            if (postNo > 0) {
+                $(".modal-body").html(postNo + "번 글이 등록되었습니다.");
+            }
+
+            $("#resultModal").modal("show");
+        }
+
+        showModal("${writeResult}");
+        history.replaceState({}, null, null); //(stateObj, title, url) 뒤로가기시 반복 출력 막기
     });
 </script>

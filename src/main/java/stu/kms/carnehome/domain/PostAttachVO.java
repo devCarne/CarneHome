@@ -4,10 +4,10 @@ import lombok.Data;
 
 @Data
 public class PostAttachVO {
-    private String uploadPath;
     private String uuid;
+    private String uploadPath;
     private String fileName;
-    private String fileType;
+    private boolean fileType;
 
     private Long postNo;
 }

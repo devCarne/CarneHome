@@ -34,7 +34,7 @@
                         </div>
 
                         <div class="col-7">
-                            <label for="username" class="form-label">성함</label>
+                            <label for="username" class="form-label">닉네임</label>
                             <input type="text" class="form-control" id="username" name="username" required maxlength="100">
                         </div>
 

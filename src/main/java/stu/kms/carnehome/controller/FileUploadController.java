@@ -2,6 +2,8 @@ package stu.kms.carnehome.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnailator;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import stu.kms.carnehome.domain.AttachFileDTO;
@@ -18,6 +21,9 @@ import stu.kms.carnehome.domain.AttachFileDTO;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -114,5 +120,54 @@ public class FileUploadController {
             e.printStackTrace();
         }
         return result;
+    }
+
+    @PostMapping("/deleteFileAjax")
+    @PreAuthorize("isAuthenticated()")
+    @ResponseBody
+    public ResponseEntity<String> deleteFileAjax(String fileName, String type) {
+        log.info("deleteFileAjax() : " + fileName + ";" + type);
+
+        try {
+            File file = new File(uploadFolder + URLDecoder.decode(fileName, StandardCharsets.UTF_8));
+            file.delete();
+
+            if (type.equals("image")) {
+                file = new File(file.getAbsolutePath().replace("s_", ""));
+                file.delete();
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>("파일 삭제 완료", HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @ResponseBody
+    public ResponseEntity<Resource> download(@RequestHeader("User-Agent") String userAgent, String fileName) {
+
+        Resource resource = new FileSystemResource(uploadFolder + fileName);
+
+        if (!resource.exists()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        String resourceFileName = resource.getFilename();
+        String resourceOriginalFileName = Objects.requireNonNull(resourceFileName).substring(resourceFileName.indexOf("_") + 1);
+        String downloadName;
+
+        if (userAgent.contains("Trident") || userAgent.contains("MSIE")) {
+            downloadName = URLEncoder.encode(resourceOriginalFileName, StandardCharsets.UTF_8).replaceAll("\\+", " ");
+        } else if (userAgent.contains("Edge")) {
+            downloadName = URLEncoder.encode(resourceOriginalFileName, StandardCharsets.UTF_8);
+        } else {
+            downloadName = new String(resourceOriginalFileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=" + downloadName);
+
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
 }

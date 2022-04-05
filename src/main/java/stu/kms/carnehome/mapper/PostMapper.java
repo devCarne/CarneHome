@@ -14,4 +14,8 @@ public interface PostMapper {
     Long getPostCount();
 
     PostVO getPost(Long postNo);
+
+    int modify(PostVO post);
+
+    void write(PostVO post);
 }

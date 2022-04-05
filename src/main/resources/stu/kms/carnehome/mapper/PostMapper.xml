@@ -38,4 +38,18 @@
     <select id="getPost" resultType="stu.kms.carnehome.domain.PostVO">
         select * from CARNEHOME_POST where POSTNO = #{postNo}
     </select>
+
+    <update id="modify">
+        update CARNEHOME_POST
+        set TITLE = #{title}, CONTENT = #{content}, USERNAME = #{userName}, UPDATEDATE = sysdate
+        where POSTNO = #{postNo}
+    </update>
+
+    <insert id="write">
+        <selectKey keyProperty="postNo" order="BEFORE" resultType="long">
+            select SEQ_POST.nextval from dual
+        </selectKey>
+        INSERT into CARNEHOME_POST (POSTNO, TITLE, CONTENT, USERNAME)
+        values (#{postNo}, #{title}, #{content}, #{userName})
+    </insert>
 </mapper>
