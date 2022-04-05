@@ -45,6 +45,10 @@
         where POSTNO = #{postNo}
     </update>
 
+    <delete id="delete">
+        delete from CARNEHOME_POST where POSTNO = #{postNo}
+    </delete>
+
     <insert id="write">
         <selectKey keyProperty="postNo" order="BEFORE" resultType="long">
             select SEQ_POST.nextval from dual

@@ -26,12 +26,17 @@ import stu.kms.carnehome.security.CustomUserDetailService;
 import stu.kms.carnehome.security.domain.CustomUser;
 import stu.kms.carnehome.service.PostService;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Controller
 @Slf4j
 @RequestMapping("/board/*")
 public class BoardController {
+
+    String uploadFolder = "C:\\upload\\carnehome\\";
 
     @Setter(onMethod_ = @Autowired)
     private PostService service;
@@ -65,12 +70,26 @@ public class BoardController {
 
         if (user.getMember().getUsername().equals(post.getUserName())){
             if (service.modify(post)) {
-                redirectAttributes.addFlashAttribute("result", "success");
+                redirectAttributes.addFlashAttribute("result", post.getPostNo() + "번 글의 수정이 완료되었습니다.");
             }
         } else {
             return "redirect:/accessDenied";
         }
         return "redirect:/board/list" + pageVO.getPageUrl();
+    }
+
+    @PostMapping("/delete")
+    public String delete(@AuthenticationPrincipal CustomUser user, Long postNo, PageVO pageVO, RedirectAttributes redirectAttributes, String userName) {
+        log.info("delete() : " + user + ";" + postNo + ";" + pageVO + ";" + userName);
+
+        List<PostAttachVO> attachList = service.getAttachList(postNo);
+
+        if (service.delete(postNo)) {
+            deleteFiles(attachList);
+
+            redirectAttributes.addFlashAttribute("result", postNo + "번 글의 삭제가 완료되었습니다.");
+        }
+        return "redirect:/board/list";
     }
 
     @GetMapping(value = "/getAttachList", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -93,7 +112,25 @@ public class BoardController {
         log.info("write() : " + post);
         service.write(post);
 
-        redirectAttributes.addFlashAttribute("writeResult", post.getPostNo());
+        redirectAttributes.addFlashAttribute("result", post.getPostNo() + "번 글의 등록이 완료되었습니다.");
         return "redirect:/board/list";
+    }
+
+    private void deleteFiles(List<PostAttachVO> attachList) {
+        if (attachList == null || attachList.size() == 0) return;
+
+        for (PostAttachVO attach : attachList) {
+            try {
+                Path file = Paths.get(uploadFolder + attach.getUploadPath() + "\\" + attach.getUuid() + "_" + attach.getFileName());
+                Files.deleteIfExists(file);
+
+                if (Files.probeContentType(file).startsWith("image")) {
+                    Path thumbnail = Paths.get(uploadFolder + attach.getUploadPath() + "\\s_" + attach.getUuid() + "_" + attach.getFileName());
+                    Files.delete(thumbnail);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

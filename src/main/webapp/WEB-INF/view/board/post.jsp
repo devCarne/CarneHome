@@ -91,7 +91,6 @@
             <sec:authorize access="isAuthenticated()">
                 <c:if test="${principal.member.username eq post.userName}">
                     <button class="modify-btn btn btn-primary">수정</button>
-                    <button class="delete-btn btn btn-danger">삭제</button>
                 </c:if>
             </sec:authorize>
             <button class="list-btn btn btn-secondary">목록으로</button>
@@ -205,8 +204,7 @@
 
         $(".list-btn").on("click", function () {
             multiForm.find("#postNo").remove();
-            multiForm.attr("action", "/board/list");
-            multiForm.submit();
+            multiForm.attr("action", "/board/list").submit();
         });
     });
 

@@ -17,5 +17,7 @@ public interface PostMapper {
 
     int modify(PostVO post);
 
+    int delete(Long postNo);
+
     void write(PostVO post);
 }

@@ -56,6 +56,13 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
+    @Transactional
+    public boolean delete(Long postNo) {
+        attachMapper.deleteAll(postNo);
+        return mapper.delete(postNo) == 1;
+    }
+
+    @Override
     public List<PostAttachVO> getAttachList(Long postNo) {
         return attachMapper.getAttachList(postNo);
     }

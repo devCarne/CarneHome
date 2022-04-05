@@ -68,24 +68,13 @@
         </div>
         <%--파일 목록--%>
 
-
-        <div class="row align-items-center justify-content-end">
-            <%--파일 업로드 폼--%>
-            <div class="col-11">
-                <input class="" type="file" id="fileUpload" multiple>
+        <%--파일 업로드 폼--%>
+        <div class="row my-5">
+            <div class="col">
+                <input class="form-control" type="file" id="fileUpload" multiple>
             </div>
-            <%--파일 업로드 폼--%>
-
-            <%--수정 버튼--%>
-            <div class="col-1">
-                <sec:authorize access="isAuthenticated()">
-                    <c:if test="${principal.member.username eq post.userName}">
-                        <button type="submit" class="modify-btn btn btn-primary">수정</button>
-                    </c:if>
-                </sec:authorize>
-            </div>
-            <%--수정 버튼--%>
         </div>
+        <%--파일 업로드 폼--%>
 
         <%--새로 업로드된 파일--%>
         <div class="row">
@@ -96,6 +85,21 @@
             </div>
         </div>
         <%--새로 업로드된 파일--%>
+
+        <%--버튼--%>
+        <div class="row">
+            <div class="col text-center">
+                <sec:authorize access="isAuthenticated()">
+                    <c:if test="${principal.member.username eq post.userName}">
+                        <button type="submit" class="modify-btn btn btn-primary">수정</button>
+                        <button class="delete-btn btn btn-danger">삭제</button>
+                    </c:if>
+                 </sec:authorize>
+                <button type="submit" class="list-btn btn btn-secondary">목록으로</button>
+            </div>
+        </div>
+
+        <%--버튼--%>
 
         <%--히든 폼--%>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -112,6 +116,8 @@
     $(document).ready(function () {
 
         let content = $("#content")
+        let modifyForm = $(".modify-form");
+
         $(".textCount").text(content.val().length + "/2000자");
 
         //textbox 글자 수 체크
@@ -123,13 +129,14 @@
             }
         });
 
-        //첨부파일 목록을 폼에 등록 후 전송
+        //수정버튼
         $(".modify-btn").on("click", function (e) {
             e.preventDefault();
 
             let str = "";
+            let fileIndex = 0;
 
-            $(".uploadResult li").each(function (i, file) {
+            $(".attachFiles li").each(function (i, file){
                 let targetFile = $(file);
 
                 str +=
@@ -137,8 +144,43 @@
                     "<input type='hidden' name='attachList[" + i + "].uuid' value='" + targetFile.data("uuid") + "'>" +
                     "<input type='hidden' name='attachList[" + i + "].uploadPath' value='" + targetFile.data("path") + "'>" +
                     "<input type='hidden' name='attachList[" + i + "].fileType' value='" + targetFile.data("type") + "'>";
+                fileIndex++;
+            })
+
+            $(".uploadResult li").each(function (i, file) {
+                let targetFile = $(file);
+
+                str +=
+                    "<input type='hidden' name='attachList[" + (i + fileIndex) + "].fileName' value='" + targetFile.data("filename") + "'>" +
+                    "<input type='hidden' name='attachList[" + (i + fileIndex) + "].uuid' value='" + targetFile.data("uuid") + "'>" +
+                    "<input type='hidden' name='attachList[" + (i + fileIndex) + "].uploadPath' value='" + targetFile.data("path") + "'>" +
+                    "<input type='hidden' name='attachList[" + (i + fileIndex) + "].fileType' value='" + targetFile.data("type") + "'>";
             });
-            $(".modify-form").append(str).submit()
+            modifyForm.append(str).submit();
+        });
+
+        //삭제버튼
+        $(".delete-btn").on("click", function (e) {
+            e.preventDefault();
+            if(confirm("정말로 삭제하시겠습니까?") === true) {
+                modifyForm.attr("action", "/board/delete").submit();
+            }
+        });
+
+        //목록버튼
+        $(".list-btn").on("click", function () {
+            let pageNumTag = $("input[name='pageNum']").clone();
+            let amountTag = $("input[name='amountPerPage']").clone();
+            let typeTag = $("input[name='searchType']").clone();
+            let keywordTag = $("input[name='keyword']").clone();
+
+            modifyForm.empty();
+            modifyForm.append(pageNumTag);
+            modifyForm.append(amountTag);
+            modifyForm.append(typeTag);
+            modifyForm.append(keywordTag);
+
+            modifyForm.attr("action", "/board/list").attr("method", "get").submit();
         });
     });
 

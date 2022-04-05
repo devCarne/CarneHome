@@ -16,6 +16,8 @@ public interface PostService {
 
     boolean modify(PostVO post);
 
+    boolean delete(Long postNo);
+
     List<PostAttachVO> getAttachList(Long postNo);
 
     void write(PostVO post);

@@ -224,15 +224,12 @@
         function showModal(result) {
             if (result === '' || history.state) return;
 
-            let postNo = parseInt(result);
-            if (postNo > 0) {
-                $(".modal-body").html(postNo + "번 글이 등록되었습니다.");
-            }
+            $(".modal-body").html(result);
 
             $("#resultModal").modal("show");
         }
 
-        showModal("${writeResult}");
+        showModal("${result}");
         history.replaceState({}, null, null); //(stateObj, title, url) 뒤로가기시 반복 출력 막기
     });
 </script>
