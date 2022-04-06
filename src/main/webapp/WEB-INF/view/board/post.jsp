@@ -46,6 +46,20 @@
     .uploadResult li:hover {
         cursor: pointer;
     }
+
+    .replyResult {
+        padding-left: 0;
+    }
+
+    .replyResult li {
+        list-style: none;
+        margin-bottom: 20px;
+        line-height: 100% ;
+    }
+
+    .replyResult li i {
+        margin-right: 10px;
+    }
 </style>
 
 <sec:authentication property="principal" var="principal"/>
@@ -108,14 +122,24 @@
     </div>
     <%--첨부 파일 목록--%>
 
+    <hr class="mb40">
 
     <div class="row">
         <div class="col">
-            <hr class="mb40">
             <h4 class="mb40"><i class="fa fa-comment"></i> 댓글</h4>
-            <h5 class="mt-0 font400 clearfix bg-light"><i class="fa fa-user"></i> aaa</h5>
-            댓글내용
-            <hr class="mb40">
+
+            <ul class="replyResult">
+                <li>
+                    <h5 class="bg-light">
+                        <i class="fa fa-user"></i>aaa
+                        <button class="btn btn-sm btn-outline-secondary" type="button">수정</button>
+                        <button class="btn btn-sm btn-outline-danger" type="button">삭제</button>
+                        <p class="pull-right text-muted">001133</p>
+                    </h5>
+                    <p>댓글내용</p>
+                </li>
+
+            </ul>
         </div>
     </div>
 
@@ -178,8 +202,6 @@
     });
     //첨부파일 목록 가져오기
 
-    //첨부파일 다운로드/원본보기
-
     //다운로드
     $(".uploadResult").on("click", "li", function () {
         let li = $(this);
@@ -196,6 +218,47 @@
     //버튼 동작
     $(document).ready(function () {
 
+        getReplyList(1);
+
+        let replyUL = $(".replyResult")
+        let replyPageNum = 1;
+
+        <%--$(document).ajaxSend(function (e, xhr) {--%>
+        <%--    xhr.setRequestHeader(${_csrf.HeaderName}, ${_csrf.token});--%>
+        <%--})--%>
+
+        function getReplyList(replyPage) {
+            $.getJSON("/reply/list/", {postNo: postNo, replyPage: replyPage}, function (resultMap) {
+
+                let replyList = resultMap.replyList;
+                let str = "";
+
+                console.log(replyList)
+                $(replyList).each(function (i, reply) {
+                    str +=
+                        "<li data-replyNo='" + reply.replyNo + "'>" +
+                        "   <h6 class='bg-light'>" +
+                        "       <i class='fa fa-user'></i>" +reply.userName +
+                        "       <button class='btn btn-sm btn-outline-secondary' type='button'>수정</button>" +
+                        "       <button class='btn btn-sm btn-outline-danger' type='button'>삭제</button>" +
+                        "       <p class='pull-right text-muted'>" +reply.replyDate + "</p>" +
+                        "   </h6>" +
+                        "   <p>" + reply.replyContent + "</p>" +
+                        "</li>"
+                });
+                replyUL.html(str);
+
+                createReplyPaging(resultMap.pageDTO)//페이징 화면도 함께 출력
+            });
+        }
+
+        function replyTime(replyDate) {
+
+        }
+
+        function createReplyPaging(replyCount) {
+
+        }
         let multiForm = $(".multi-form")
 
         $(".modify-btn").on("click", function () {
@@ -207,5 +270,7 @@
             multiForm.attr("action", "/board/list").submit();
         });
     });
+
+    //댓글 처리
 
 </script>

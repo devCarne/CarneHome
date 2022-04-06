@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="stu.kms.carnehome.mapper.ReplyMapper">
+
+    <select id="list" resultType="stu.kms.carnehome.domain.ReplyVO">
+        select REPLYNO, POSTNO, USERNAME, REPLYCONTENT, REPLYDATE, UPDATEDATE
+        from (
+            select /*+INDEX(CARNEHOME_REPLY INDEX_CarneHome_Reply) */ ROWNUM RN, REPLYNO, POSTNO, REPLYCONTENT, USERNAME, REPLYDATE, UPDATEDATE
+            from CARNEHOME_REPLY
+            where POSTNO = #{postNo}
+            and REPLYNO > 0
+            and rownum &lt;= #{pageVO.pageNum} * #{pageVO.amountPerPage}
+        )
+        where RN > (#{pageVO.pageNum} - 1) * #{pageVO.amountPerPage}
+    </select>
+
+    <select id="getReplyCount" resultType="Long">
+        select count(REPLYNO)
+        from CARNEHOME_REPLY
+        where POSTNO = #{postNo}
+    </select>
+
+</mapper>
