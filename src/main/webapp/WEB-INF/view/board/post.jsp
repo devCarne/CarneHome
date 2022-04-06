@@ -54,7 +54,7 @@
     .replyResult li {
         list-style: none;
         margin-bottom: 20px;
-        line-height: 100% ;
+        line-height: 100%;
     }
 
     .replyResult li i {
@@ -138,8 +138,13 @@
                     </h5>
                     <p>댓글내용</p>
                 </li>
-
             </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col reply-paging">
+
         </div>
     </div>
 
@@ -165,9 +170,30 @@
 </div>
 
 <script>
-    //첨부파일 목록 가져오기
+    $(document).ready(function () {
+        getReplyList(1);
+    });
+
+    // 버튼 처리
+    let multiForm = $(".multi-form")
+    $(".modify-btn").on("click", function () {
+        multiForm.attr("action", "/board/modify").submit();
+    });
+
+    $(".list-btn").on("click", function () {
+        multiForm.find("#postNo").remove();
+        multiForm.attr("action", "/board/list").submit();
+    });
+    // 버튼 처리
+
+
+
+
+
+    // 첨부파일 처리
     let postNo = ${post.postNo};
 
+    //첨부파일 목록 가져오기
     $.getJSON("/board/getAttachList", {postNo: postNo}, function (result) {
         let fileCallPath;
         let str = "";
@@ -200,7 +226,6 @@
         });
         $(".uploadResult").append(str)
     });
-    //첨부파일 목록 가져오기
 
     //다운로드
     $(".uploadResult").on("click", "li", function () {
@@ -213,64 +238,113 @@
             self.location = "/download?fileName=" + fileCallPath;
         }
     });
-    //다운로드
+    //첨부파일 처리
 
-    //버튼 동작
-    $(document).ready(function () {
 
-        getReplyList(1);
 
-        let replyUL = $(".replyResult")
-        let replyPageNum = 1;
 
-        <%--$(document).ajaxSend(function (e, xhr) {--%>
-        <%--    xhr.setRequestHeader(${_csrf.HeaderName}, ${_csrf.token});--%>
-        <%--})--%>
-
-        function getReplyList(replyPage) {
-            $.getJSON("/reply/list/", {postNo: postNo, replyPage: replyPage}, function (resultMap) {
-
-                let replyList = resultMap.replyList;
-                let str = "";
-
-                console.log(replyList)
-                $(replyList).each(function (i, reply) {
-                    str +=
-                        "<li data-replyNo='" + reply.replyNo + "'>" +
-                        "   <h6 class='bg-light'>" +
-                        "       <i class='fa fa-user'></i>" +reply.userName +
-                        "       <button class='btn btn-sm btn-outline-secondary' type='button'>수정</button>" +
-                        "       <button class='btn btn-sm btn-outline-danger' type='button'>삭제</button>" +
-                        "       <p class='pull-right text-muted'>" +reply.replyDate + "</p>" +
-                        "   </h6>" +
-                        "   <p>" + reply.replyContent + "</p>" +
-                        "</li>"
-                });
-                replyUL.html(str);
-
-                createReplyPaging(resultMap.pageDTO)//페이징 화면도 함께 출력
-            });
-        }
-
-        function replyTime(replyDate) {
-
-        }
-
-        function createReplyPaging(replyCount) {
-
-        }
-        let multiForm = $(".multi-form")
-
-        $(".modify-btn").on("click", function () {
-            multiForm.attr("action", "/board/modify").submit();
-        });
-
-        $(".list-btn").on("click", function () {
-            multiForm.find("#postNo").remove();
-            multiForm.attr("action", "/board/list").submit();
-        });
-    });
 
     //댓글 처리
+    let replyUL = $(".replyResult");
+    let replyPagingUL = $(".reply-paging");
+    let replyPageNum = 1;
 
+    let csrfHeaderName = "${_csrf.headerName}";
+    let csrfTokenValue = "${_csrf.token}";
+
+    $(document).ajaxSend(function (e, xhr) {
+        xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+    });
+
+    //댓글 목록 가져오기
+    function getReplyList(replyPage) {
+        $.getJSON("/reply/list/", {postNo: postNo, replyPage: replyPage}, function (resultMap) {
+
+            let replyList = resultMap.replyList;
+            let str = "";
+
+            console.log(resultMap.userName);
+            $(replyList).each(function (i, reply) {
+                str +=
+                    "<li data-replyNo='" + reply.replyNo + "'>" +
+                    "   <h6 class='bg-light'>" +
+                    "       <i class='fa fa-user'></i>" + reply.userName + "";
+
+                if (resultMap.userName === reply.userName) {
+                    str +=
+                        "                   <button class='btn btn-sm btn-outline-secondary' type='button'>수정</button>" +
+                        "                   <button class='btn btn-sm btn-outline-danger' type='button'>삭제</button>";
+                }
+                str +=
+                    "       <p class='pull-right text-muted'>" + replyTimeFormat(reply.replyDate) + "</p>" +
+                    "   </h6>" +
+                    "   <p>" + reply.replyContent + "</p>" +
+                    "</li>"
+            });
+
+            replyUL.html(str);
+            createReplyPaging(resultMap.pageDTO)//페이징 화면도 함께 출력
+        });
+    }
+
+    //댓글 시간 표시 함수
+    function replyTimeFormat(replyDate) {
+        let now = new Date();
+        let written = new Date(replyDate);
+
+        let gap = now.getTime() - written.getTime();
+
+        let yy = written.getFullYear();
+        let mm = written.getMonth() + 1;
+        let dd = written.getDate();
+
+        if (gap < (86400000)) {
+            let hh = written.getHours();
+            let mi = written.getMonth();
+            let ss = written.getSeconds();
+
+            return [yy, '/', (mm > 9 ? '' : '0') + mm, '/', (dd > 9 ? '' : '0') + dd, ' ', (hh > 9 ? '' : '0') + hh, ':', (mi > 9 ? '' : '0') + mi, ":", (ss > 9 ? '' : '0') + ss].join('');
+        } else {
+            return [yy, '/', (mm > 9 ? '' : '0') + mm, '/', (dd > 9 ? '' : '0') + dd].join('');
+        }
+    }
+
+    //댓글 페이징 처리 함수
+    function createReplyPaging(pageDTO) {
+        let str = "<ul class='pagination justify-content-center'>";
+
+        if (pageDTO.prevPageList) {
+            str +=
+                "<li class='page-item'>" +
+                "   <a class='page-link' href='" + (pageDTO.startPage - 1) + "'>이전</a>" +
+                "</li>"
+        }
+
+        for (let i = pageDTO.startPage; i <= pageDTO.endPage; i++) {
+            let pageActive = replyPageNum === i ? "active" : "";
+
+            str +=
+                "<li class='page-item'" + pageActive + "'>" +
+                "   <a class='page-link' href='" + i + "'>" + i + "</a>" +
+                "</li>"
+        }
+
+        if (pageDTO.nextPageList) {
+            str +=
+                "<li class='page-item'>" +
+                "   <a class='page-link' href='" + (pageDTO.endPage + 1) + "'>다음</a>" +
+                "</li>"
+        }
+
+        str += "</ul></div>";
+        replyPagingUL.html(str);
+    }
+
+    //댓글 페이징 버튼 처리
+    replyPagingUL.on("click", "li a", function (e) {
+        e.preventDefault();
+        replyPageNum = $(this).attr("href");
+        getReplyList(replyPageNum);
+    });
+    //댓글 처리
 </script>
