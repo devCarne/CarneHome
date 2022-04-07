@@ -149,29 +149,44 @@
     </div>
 
     <div class="row justify-content-center">
-        <div class="col-10">
-            <h4 class="mb40 text-uppercase font500">댓글 쓰기</h4>
-            <form role="form">
-                <div class="form-group">
-                    <label>작성자</label>
-                    <input type="text" class="form-control" placeholder="홍길동">
-                </div>
-                <div class="form-group">
-                    <label>내용</label>
-                    <textarea class="form-control" rows="5" placeholder="안녕하세요"></textarea>
-                </div>
-                <div class="clearfix float-right">
-                    <button type="button" class="btn btn-primary btn-lg">등록</button>
-                </div>
-            </form>
+        <div class="col">
+            <h4 class="mb40 font500">댓글 쓰기</h4>
         </div>
     </div>
 
+    <form>
+        <div class="row align-items-baseline">
+            <label for="userName" class="col-sm-1 form-label">작성자</label>
+            <div class="col-10">
+                <input type="text" class="form-control input-userName" id="userName" value="${principal.member.username}" readonly>
+            </div>
+            <div class="col-1">
+                <button type="button" class="btn-reply btn btn-primary">등록</button>
+            </div>
+        </div>
+
+        <div class="row align-items-baseline">
+            <label for="replyContent" class="col-sm-1 form-label">내용</label>
+            <div class="col-10">
+                <textarea class="form-control input-replyContent" id="replyContent" rows="6" maxlength="1000"
+                          style="resize: none" required></textarea>
+            </div>
+            <div class="col-1">
+                <p class="replyContentCount">0/1000자</p>
+            </div>
+        </div>
+    </form>
+
+        <div class="row">
+            <div class="col text-center">
+                <button class="list-btn btn btn-secondary">목록으로</button>
+            </div>
+        </div>
 </div>
 
 <script>
     $(document).ready(function () {
-        getReplyList(1);
+        getReplyList(replyPageNum);
     });
 
     // 버튼 처리
@@ -245,13 +260,10 @@
 
 
     //댓글 처리
-    let replyUL = $(".replyResult");
-    let replyPagingUL = $(".reply-paging");
     let replyPageNum = 1;
 
     let csrfHeaderName = "${_csrf.headerName}";
     let csrfTokenValue = "${_csrf.token}";
-
     $(document).ajaxSend(function (e, xhr) {
         xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
     });
@@ -263,17 +275,16 @@
             let replyList = resultMap.replyList;
             let str = "";
 
-            console.log(resultMap.userName);
             $(replyList).each(function (i, reply) {
                 str +=
-                    "<li data-replyNo='" + reply.replyNo + "'>" +
+                    "<li data-replyno='" + reply.replyNo + "' data-username='" + reply.userName + "'>" +
                     "   <h6 class='bg-light'>" +
                     "       <i class='fa fa-user'></i>" + reply.userName + "";
 
                 if (resultMap.userName === reply.userName) {
                     str +=
-                        "                   <button class='btn btn-sm btn-outline-secondary' type='button'>수정</button>" +
-                        "                   <button class='btn btn-sm btn-outline-danger' type='button'>삭제</button>";
+                        "                   <input class='btn-replyModifyExpand btn btn-sm btn-outline-secondary' type='button' value='수정'>" +
+                        "                   <input class='btn-replyDelete btn btn-sm btn-outline-danger' type='button' value='삭제'>";
                 }
                 str +=
                     "       <p class='pull-right text-muted'>" + replyTimeFormat(reply.replyDate) + "</p>" +
@@ -282,7 +293,7 @@
                     "</li>"
             });
 
-            replyUL.html(str);
+            $(".replyResult").html(str);
             createReplyPaging(resultMap.pageDTO)//페이징 화면도 함께 출력
         });
     }
@@ -337,14 +348,111 @@
         }
 
         str += "</ul></div>";
-        replyPagingUL.html(str);
+        $(".reply-paging").html(str);
     }
 
+
     //댓글 페이징 버튼 처리
-    replyPagingUL.on("click", "li a", function (e) {
+    $(".reply-paging").on("click", "li a", function (e) {
         e.preventDefault();
         replyPageNum = $(this).attr("href");
         getReplyList(replyPageNum);
     });
     //댓글 처리
+
+    //댓글 등록 내용 글자 수 표시
+    $(".input-replyContent").keyup(function () {
+        $(".replyContentCount").text($(".input-replyContent").val().length + "/1000자");
+    });
+
+    //댓글 등록
+    $(".btn-reply").on("click", function () {
+
+        let reply = {
+            postNo: postNo,
+            replyContent: $(".input-replyContent").val(),
+            userName: $(".input-userName").val()
+        }
+
+        console.log(reply);
+
+        if ($(".input-replyContent").val().length === 0) {
+            alert("내용을 입력해주세요.")
+            return;
+        }
+
+        $.ajax({
+            url: "/reply/writeAjax",
+            method: "POST",
+            data: JSON.stringify(reply),
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                alert(result);
+                getReplyList(replyPageNum);
+            }
+        });
+    });
+
+    //댓글 변경 펼치기
+    $(document).on("click", ".btn-replyModifyExpand", function () {
+        let targetLI = $(this).closest("li");
+        targetLI.append(
+            "<form>" +
+            "   <div class='row'>" +
+            "       <div class='col-10'>" +
+            "           <textarea class='form-control textarea-replyModify' rows='5' maxlength='1000' style='resize: none'></textarea>" +
+            "       </div>" +
+            "       <div class='col'>" +
+            "           <input type='button' class='btn-replyModify btn btn-primary' value='수정'>" +
+            "       </div>" +
+            "   </div>" +
+            "</form>"
+        );
+        $(this).hide();
+    });
+
+    //댓글 변경
+    $(document).on("click", ".btn-replyModify", function () {
+        let reply = {
+            replyNo: $(this).closest("li").data("replyno"),
+            postNo: postNo,
+            replyContent: $(".textarea-replyModify").val(),
+            userName: $(this).closest("li").data("username")
+        }
+
+        console.log(reply);
+
+        if ($(".textarea-replyModify").val().length === 0) {
+            alert("내용을 입력해주세요.")
+            return;
+        }
+
+        $.ajax({
+            url: "/reply/modifyAjax",
+            method: "POST",
+            data: JSON.stringify(reply),
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                alert(result);
+                getReplyList(replyPageNum);
+            }
+        });
+    });
+
+    //댓글 삭제
+    $(document).on("click", ".btn-replyDelete", function () {
+        let replyNo = $(this).closest("li").data("replyno");
+
+        $.ajax({
+            url: "/reply/deleteAjax",
+            method: "POST",
+            data: JSON.stringify(replyNo),
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                alert(result);
+                getReplyList(replyPageNum);
+            },
+        })
+    });
+
 </script>

@@ -79,8 +79,8 @@ public class BoardController {
     }
 
     @PostMapping("/delete")
-    public String delete(@AuthenticationPrincipal CustomUser user, Long postNo, PageVO pageVO, RedirectAttributes redirectAttributes, String userName) {
-        log.info("delete() : " + user + ";" + postNo + ";" + pageVO + ";" + userName);
+    public String delete(Long postNo, PageVO pageVO, RedirectAttributes redirectAttributes) {
+        log.info("delete() : " + postNo + ";" + pageVO + ";");
 
         List<PostAttachVO> attachList = service.getAttachList(postNo);
 

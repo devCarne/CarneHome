@@ -16,10 +16,25 @@
         where RN > (#{pageVO.pageNum} - 1) * #{pageVO.amountPerPage}
     </select>
 
+    <select id="getReply" resultType="stu.kms.carnehome.domain.ReplyVO">
+        select * from CARNEHOME_REPLY where REPLYNO = #{replyNo}
+    </select>
+
     <select id="getReplyCount" resultType="Long">
         select count(REPLYNO)
         from CARNEHOME_REPLY
         where POSTNO = #{postNo}
     </select>
 
+    <insert id="write">
+        insert into CARNEHOME_REPLY (REPLYNO, POSTNO, REPLYCONTENT, USERNAME) VALUES (SEQ_REPLY.nextval, #{postNo}, #{replyContent}, #{userName})
+    </insert>
+
+    <update id="modify">
+        update CARNEHOME_REPLY set REPLYCONTENT = #{replyContent}, UPDATEDATE = sysdate where REPLYNO = #{replyNo}
+    </update>
+
+    <delete id="delete">
+        delete from CARNEHOME_REPLY where REPLYNO = #{replyNo}
+    </delete>
 </mapper>

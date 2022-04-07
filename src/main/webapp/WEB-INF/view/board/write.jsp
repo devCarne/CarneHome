@@ -82,11 +82,7 @@
 
         //textbox 글자 수 체크
         content.keyup(function () {
-            if (content.length === 0 || content === "") {
-                $(".textCount").text("0자/2000자");
-            } else {
-                $(".textCount").text(content.val().length + "/2000자");
-            }
+            $(".textCount").text(content.val().length + "/2000자");
         });
 
         //파일 업로드

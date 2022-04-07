@@ -56,4 +56,8 @@
         INSERT into CARNEHOME_POST (POSTNO, TITLE, CONTENT, USERNAME)
         values (#{postNo}, #{title}, #{content}, #{userName})
     </insert>
+
+    <update id="updateReplyCount">
+        update CARNEHOME_POST set REPLYCOUNT = REPLYCOUNT + #{amount} where POSTNO = #{postNo}
+    </update>
 </mapper>

@@ -20,4 +20,6 @@ public interface PostMapper {
     int delete(Long postNo);
 
     void write(PostVO post);
+
+    void updateReplyCount(Long postNo, int amount);
 }
