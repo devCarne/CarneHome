@@ -62,10 +62,10 @@
 
 
                 <sec:authorize access="isAnonymous()">
-                <div class="col-2">
-                    <button type="button" class="btn btn-outline-light me-2" id="signInBtn">로그인</button>
-                    <button type="button" class="btn btn-warning" id="singUpBtn">회원가입</button>
-                </div>
+                    <div class="col-4 btn-group">
+                        <button type="button" class="btn btn-outline-light me-2" id="signInBtn">로그인</button>
+                        <button type="button" class="btn btn-warning" id="singUpBtn">회원가입</button>
+                    </div>
                 </sec:authorize>
 
                 <sec:authorize access="isAuthenticated()">

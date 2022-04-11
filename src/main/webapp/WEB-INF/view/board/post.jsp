@@ -289,7 +289,7 @@
                 str +=
                     "       <p class='pull-right text-muted'>" + replyTimeFormat(reply.replyDate) + "</p>" +
                     "   </h6>" +
-                    "   <p>" + reply.replyContent + "</p>" +
+                    "   <p class='replyResultContents'>" + reply.replyContent + "</p>" +
                     "</li>"
             });
 
@@ -408,6 +408,7 @@
             "   </div>" +
             "</form>"
         );
+        targetLI.find("textarea").val(targetLI.find(".replyResultContents").text());
         $(this).hide();
     });
 
