@@ -27,7 +27,7 @@
     </select>
 
     <insert id="write">
-        insert into CARNEHOME_REPLY (REPLYNO, POSTNO, REPLYCONTENT, USERNAME) VALUES (SEQ_REPLY.nextval, #{postNo}, #{replyContent}, #{userName})
+        insert into CARNEHOME_REPLY (REPLYNO, POSTNO, REPLYCONTENT, USERNAME) VALUES (SEQ_CARNEHOME_REPLY.nextval, #{postNo}, #{replyContent}, #{userName})
     </insert>
 
     <update id="modify">

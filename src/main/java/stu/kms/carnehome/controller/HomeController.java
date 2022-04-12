@@ -33,12 +33,13 @@ public class HomeController {
     @PostMapping(value = "/idCheck")
     @ResponseBody
     public ResponseEntity<String> idCheck(String userid){
-        log.info("userid : " + userid);
+        log.info("idCheck() : " + userid);
         return new ResponseEntity<>(service.idCheck(userid), HttpStatus.OK);
     }
 
     @PostMapping("/signUp")
     public String signUp(MemberVO member, AuthVO auth, RedirectAttributes redirectAttributes) {
+        log.info("signUp() : " + member + ";" + auth);
         if (service.signUp(member, auth) == 1) {
             redirectAttributes.addFlashAttribute("result", member.getUsername());
         }
@@ -50,6 +51,7 @@ public class HomeController {
             @RequestParam(value = "error", required = false)String error,
             @RequestParam(value = "exception", required = false)String exception,
             Model model) {
+        log.info("signIn() : " + error, exception);
 
         model.addAttribute("error", error);
         model.addAttribute("exception", exception);

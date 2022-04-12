@@ -5,6 +5,7 @@
 <title>게시판</title>
 <jsp:include page="../includes/header.jsp"/>
 
+
 <div class="container">
     <div class="row">
         <div class="col py-3 mb-4 border-bottom">
@@ -24,7 +25,7 @@
         <%--제목--%>
         <div class="row align-items-baseline">
             <label for="title" class="col-sm-1 form-label">제목</label>
-            <div class="col-sm-6">
+            <div class="col-sm-5">
                 <input type="text" class="form-control" id="title" name="title" maxlength="100" required>
             </div>
         </div>
@@ -52,13 +53,15 @@
 
         <div class="row align-items-center justify-content-end">
             <%--파일 업로드--%>
-            <div class="col-11">
+            <div class="col-10">
                 <input class="form-control" type="file" id="fileUpload" multiple>
             </div>
 
             <%--등록 버튼--%>
-            <div class="col-1">
-                <button type="submit" class="write-btn btn btn-primary btn-lg">작성</button>
+            <div class="col-2">
+                <button type="submit" class="write-btn btn btn-primary">작성</button>
+                <button class="list-btn btn btn-secondary">목록으로</button>
+
             </div>
 
         </div>
@@ -204,6 +207,19 @@
         $(".write-btn").on("click", function (e) {
             e.preventDefault();
 
+            let title = $("#title");
+            let content = $("#content");
+
+            if (title.val() === null || title.val().length === 0) {
+                alert("제목을 입력해주세요.");
+                title.focus();
+                return;
+            } else if (content.val() === null || content.val().length === 0) {
+                alert("내용을 입력해주세요.");
+                content.focus();
+                return;
+            }
+
             let str = "";
             $(".uploadResult li").each(function (i, file) {
                 let targetFile = $(file);
@@ -215,6 +231,15 @@
                     "<input type='hidden' name='attachList[" + i + "].fileType' value='" + targetFile.data("type") + "'>";
             });
             $(".write-form").append(str).submit();
+        });
+
+        //목록으로 버튼 동작 처리
+        $(".list-btn").on("click", function (e) {
+            e.preventDefault()
+            if (confirm("작성한 내용을 잃게 됩니다. 계속하시겠습니까?") === true) {
+                location.href = "/board/list";
+            } else {
+            }
         });
     })
 </script>

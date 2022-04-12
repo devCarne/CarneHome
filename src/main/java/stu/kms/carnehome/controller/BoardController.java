@@ -89,7 +89,7 @@ public class BoardController {
 
             redirectAttributes.addFlashAttribute("result", postNo + "번 글의 삭제가 완료되었습니다.");
         }
-        return "redirect:/board/list";
+        return "redirect:/board/list" + pageVO.getPageUrl();
     }
 
     @GetMapping(value = "/getAttachList", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -110,6 +110,7 @@ public class BoardController {
     @PreAuthorize("isAuthenticated()")
     public String register(PostVO post, RedirectAttributes redirectAttributes) {
         log.info("write() : " + post);
+
         service.write(post);
 
         redirectAttributes.addFlashAttribute("result", post.getPostNo() + "번 글의 등록이 완료되었습니다.");

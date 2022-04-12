@@ -36,6 +36,11 @@
         text-align: center
     }
 
+    .highlight {
+        font-weight: bold;
+        background-color: lightgray;
+    }
+
 
 </style>
 

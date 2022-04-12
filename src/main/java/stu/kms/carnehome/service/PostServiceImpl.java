@@ -76,8 +76,8 @@ public class PostServiceImpl implements PostService{
         if (post.getAttachList() == null || post.getAttachList().size() <= 0) {
             return;
         }
-        log.info(post.getAttachList().toString());
-//        첨부파일 목록을 DB에 저장
+
+        //첨부파일 목록을 DB에 저장
         for (PostAttachVO attach : post.getAttachList()) {
             attach.setPostNo(post.getPostNo());
             attachMapper.insert(attach);

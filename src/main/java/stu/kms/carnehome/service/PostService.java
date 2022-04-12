@@ -21,4 +21,5 @@ public interface PostService {
     List<PostAttachVO> getAttachList(Long postNo);
 
     void write(PostVO post);
+
 }

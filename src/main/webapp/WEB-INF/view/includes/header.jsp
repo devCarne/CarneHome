@@ -70,10 +70,14 @@
 
                 <sec:authorize access="isAuthenticated()">
                 <div class="col">
+                    <sec:authorize access="hasAuthority('SUPER')">
+                        <span>우수회원</span>
+                    </sec:authorize>
                     <span><sec:authentication property="principal.member.username"/>님 안녕하세요.</span>
                 </div>
 
-                <div class="col-2">
+
+                    <div class="col-2">
                     <form class="logout-form visually-hidden" role="form" method="post" action="/logout">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     </form>

@@ -46,7 +46,7 @@
 
                         <div class="col-md-5">
                             <label for="auth" class="form-label">회원등급<span
-                                    class="text-muted">(우수회원은 특별 게시판 이용 가능)</span></label>
+                                    class="text-muted">(우수회원은 게시판에 강조글 작성 가능)</span></label>
                             <select class="form-select" id="auth" name="auth">
                                 <option value="NORMAL">일반회원</option>
                                 <option value="SUPER">우수회원</option>
@@ -123,7 +123,6 @@
     function submitCheck() {
         let check = $("#idCheck").text();
 
-        console.log(check)
         if (check === "중복된 아이디입니다.") {
             alert("다른 아이디를 입력해주세요.");
             $("#userid").focus();
