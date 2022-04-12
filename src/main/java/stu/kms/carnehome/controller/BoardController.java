@@ -3,14 +3,12 @@ package stu.kms.carnehome.controller;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,9 +20,9 @@ import stu.kms.carnehome.domain.PageDTO;
 import stu.kms.carnehome.domain.PageVO;
 import stu.kms.carnehome.domain.PostAttachVO;
 import stu.kms.carnehome.domain.PostVO;
-import stu.kms.carnehome.security.CustomUserDetailService;
 import stu.kms.carnehome.security.domain.CustomUser;
 import stu.kms.carnehome.service.PostService;
+import stu.kms.carnehome.service.ReplyService;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,6 +38,9 @@ public class BoardController {
 
     @Setter(onMethod_ = @Autowired)
     private PostService service;
+
+    @Setter(onMethod_ = @Autowired)
+    private ReplyService replyService;
 
     @GetMapping("/list")
     public void list(PageVO pageVO, Model model) {
@@ -83,11 +84,19 @@ public class BoardController {
         log.info("delete() : " + postNo + ";" + pageVO + ";");
 
         List<PostAttachVO> attachList = service.getAttachList(postNo);
+        deleteFiles(attachList);
 
-        if (service.delete(postNo)) {
-            deleteFiles(attachList);
-
+        if (replyService.getReplyCount(postNo) == 0) {
+            service.delete(postNo);
             redirectAttributes.addFlashAttribute("result", postNo + "번 글의 삭제가 완료되었습니다.");
+
+        } else {
+            PostVO post = new PostVO();
+            post.setPostNo(postNo);
+            post.setTitle("삭제된 글입니다.");
+            post.setContent("삭제된 글입니다.");
+            post.setUserName("관리자");
+            service.modify(post);
         }
         return "redirect:/board/list" + pageVO.getPageUrl();
     }

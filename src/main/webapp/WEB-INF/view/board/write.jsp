@@ -238,7 +238,6 @@
             e.preventDefault()
             if (confirm("작성한 내용을 잃게 됩니다. 계속하시겠습니까?") === true) {
                 location.href = "/board/list";
-            } else {
             }
         });
     })
