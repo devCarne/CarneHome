@@ -4,7 +4,9 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,7 @@ public class HomeController {
     }
 
     @GetMapping("/signUp")
+    @PreAuthorize("isAnonymous()")
     public void signUp() {
     }
 
@@ -47,6 +50,7 @@ public class HomeController {
     }
 
     @GetMapping("/signIn")
+    @PreAuthorize("isAnonymous()")
     public void signIn(
             @RequestParam(value = "error", required = false)String error,
             @RequestParam(value = "exception", required = false)String exception,
@@ -55,6 +59,29 @@ public class HomeController {
 
         model.addAttribute("error", error);
         model.addAttribute("exception", exception);
+    }
+
+    @GetMapping("/memberModify")
+    @PreAuthorize("isAuthenticated()")
+    public void memberModify() {
+
+    }
+
+    @PostMapping("/memberModify")
+    @PreAuthorize("isAuthenticated()")
+    public String memberModify(MemberVO member, AuthVO auth, RedirectAttributes redirectAttributes) {
+        log.info("memberModify() : " + member + ";" + auth);
+        if (service.modify(member, auth)) {
+            redirectAttributes.addFlashAttribute("modifyResult", member.getUsername());
+        }
+        return "redirect:/";
+    }
+
+    @PostMapping(value = "/pwCheckAjax")
+    @ResponseBody
+    public ResponseEntity<String> pwCheck(String userid, String originalPw) {
+        log.info("pwCheck() : " + userid + ";" + originalPw);
+        return new ResponseEntity<>(service.pwCheck(userid, originalPw), HttpStatus.OK);
     }
 
     @GetMapping("/accessDenied")

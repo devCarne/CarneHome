@@ -23,19 +23,32 @@ public class MemberServiceImpl implements MemberService{
     @Override
     @Transactional
     public int signUp(MemberVO member, AuthVO auth) {
-        log.info("회원가입 : " + member + auth);
-
         member.setUserpw(passwordEncoder.encode(member.getUserpw()));
 
         mapper.signUp(member);
 
         if (auth.getAuth().equals("SUPER")) {
-            log.info("우수회원");
             mapper.signUpAuth(auth);
         }
 
         auth.setAuth("NORMAL");
         return mapper.signUpAuth(auth);
+    }
+
+    @Override
+    public boolean modify(MemberVO member, AuthVO auth) {
+        member.setUserpw(passwordEncoder.encode(member.getUserpw()));
+
+        mapper.modify(member);
+
+        mapper.deleteAuth(member.getUserid());
+
+        if (auth.getAuth().equals("SUPER")) {
+            mapper.signUpAuth(auth);
+        }
+
+        auth.setAuth("NORMAL");
+        return mapper.signUpAuth(auth) == 1;
     }
 
     @Override
@@ -47,4 +60,15 @@ public class MemberServiceImpl implements MemberService{
             return "dup";
         }
     }
+
+    @Override
+    public String pwCheck(String userid, String originalPw) {
+        if (passwordEncoder.matches(originalPw, mapper.pwCheck(userid))) {
+            return "ok";
+        } else {
+            return "no";
+        }
+    }
+
+
 }

@@ -62,7 +62,7 @@
 
 
                 <sec:authorize access="isAnonymous()">
-                    <div class="col-4 btn-group">
+                    <div class="col-3 btn-group">
                         <button type="button" class="btn btn-outline-light me-2" id="signInBtn">로그인</button>
                         <button type="button" class="btn btn-warning" id="singUpBtn">회원가입</button>
                     </div>
@@ -77,11 +77,12 @@
                 </div>
 
 
-                    <div class="col-2">
+                    <div class="col-3 btn-group">
                     <form class="logout-form visually-hidden" role="form" method="post" action="/logout">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     </form>
                     <button type="button" class="btn btn-outline-light me-2" id="logoutBtn">로그아웃</button>
+                        <button type="button" class="btn btn-outline-light me-2 btn-memberModify">정보수정</button>
 <%--                    <button type="button" class="btn btn-warning" id="singUpBtn">회원정보 수정</button>--%>
                 </div>
                 </sec:authorize>
@@ -107,6 +108,10 @@
         $("#logoutBtn").on("click", function () {
             $(".logout-form").submit();
             alert("로그아웃 하였습니다.");
+        });
+
+        $(".btn-memberModify").on("click", function () {
+            location.href = "/memberModify";
         });
     });
 </script>

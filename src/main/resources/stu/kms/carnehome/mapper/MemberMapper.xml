@@ -12,6 +12,19 @@
         values (#{userid}, #{auth})
     </insert>
 
+    <update id="modify">
+        update CARNEHOME_MEMBER
+        set
+            USERPW = #{userpw},
+            USERMAIL = #{usermail}
+        where USERID = #{userid}
+    </update>
+
+    <update id="deleteAuth">
+        delete from CARNEHOME_MEMBER_AUTH where USERID = #{userid}
+    </update>
+
+
     <resultMap id="memberMap" type="stu.kms.carnehome.domain.MemberVO">
         <id property="userid" column="userid"/>
         <result property="userid" column="userid"/>
@@ -36,4 +49,7 @@
         where mem.USERID = #{userid}
     </select>
 
+    <select id="pwCheck" resultType="String">
+        select USERPW from CARNEHOME_MEMBER where USERID = #{userid}
+    </select>
 </mapper>

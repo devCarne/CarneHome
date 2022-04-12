@@ -11,6 +11,11 @@ public interface MemberMapper {
 
     int signUpAuth(AuthVO auth);
 
+    int modify(MemberVO member);
+
+    void deleteAuth(String userid);
+
     MemberVO loadUser(String username);
 
+    String pwCheck(String userid);
 }

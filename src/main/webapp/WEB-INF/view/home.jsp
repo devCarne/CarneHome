@@ -146,7 +146,11 @@
         $(document).ready(function () {
             //모달창 표현
             let result = '<c:out value="${result}"/>';
+            let modifyResult = '<c:out value="${modifyResult}"/>';
+
             checkModal(result);
+            checkModifyModal(modifyResult);
+
             history.replaceState({}, null, null);
 
             //모달창 표현 함수
@@ -156,6 +160,16 @@
                 }
                 if (result !== null) {
                     $(".modal-body").html(result + "님의 회원가입이 완료되었습니다. 로그인 후 이용하세요.");
+                }
+                $("#myModal").modal("show");
+            }
+
+            function checkModifyModal(modifyResult) {
+                if (modifyResult === '' || history.state) {
+                    return;
+                }
+                if (modifyResult !== null) {
+                    $(".modal-body").html(modifyResult + "님의 정보수정이 완료되었습니다.");
                 }
                 $("#myModal").modal("show");
             }

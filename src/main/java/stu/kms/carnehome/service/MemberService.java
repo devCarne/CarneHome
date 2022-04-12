@@ -7,5 +7,10 @@ public interface MemberService {
 
     int signUp(MemberVO member, AuthVO auth);
 
+    boolean modify(MemberVO member, AuthVO auth);
+
     String idCheck(String userid);
+
+    String pwCheck(String userid, String originalPw);
+
 }
