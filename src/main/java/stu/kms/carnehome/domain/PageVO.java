@@ -8,6 +8,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class PageVO {
     private int pageNum;
     private int amountPerPage;
+    private int offset;
 
     private String searchType;
     private String keyword;
@@ -29,5 +30,9 @@ public class PageVO {
                 .queryParam("keyword", this.keyword);
 
         return builder.toUriString();
+    }
+
+    public void setOffset() {
+        this.offset = (this.pageNum - 1) * this.amountPerPage;
     }
 }

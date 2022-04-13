@@ -7,28 +7,25 @@
     <sql id="searchTypeSql">
         <choose>
             <when test="searchType == 'T'.toString()">
-                TITLE like '%'||#{keyword}||'%' AND
+                where title like Concat('%',Ifnull(#{keyword}, ''),'%')
             </when>
             <when test="searchType == 'C'.toString()">
-                CONTENT like '%'||#{keyword}||'%' AND
+                where content like Concat('%',Ifnull(#{keyword}, ''),'%')
             </when>
             <when test="searchType == 'U'.toString()">
-                USERNAME like '%'||#{keyword}||'%' AND
+                where username like Concat('%',Ifnull(#{keyword}, ''),'%')
             </when>
             <when test="searchType == 'TC'.toString()">
-                (TITLE like '%'||#{keyword}||'%' OR CONTENT like '%'||#{keyword}||'%') AND
+                where title like Concat('%',Ifnull(#{keyword}, ''),'%') OR content like Concat('%',Ifnull(#{keyword}, ''),'%')
             </when>
         </choose>
     </sql>
 
     <select id="getList" resultType="stu.kms.carnehome.domain.PostVO">
         select postNo, title, content, username, postDate, updateDate, replyCount
-        from (
-            select /*+INDEX_DESC(CARNEHOME_POST PK_POST)*/ ROWNUM RN, postno, title, content, username, postdate, updatedate, replycount
-            from CARNEHOME_POST
-            where <include refid="searchTypeSql"/> rownum &lt;= #{pageNum} * #{amountPerPage}
-            )
-        where RN > (#{pageNum} -1) * #{amountPerPage}
+        from CARNEHOME_POST
+        <include refid="searchTypeSql"/> order by postNo desc
+        limit #{offset} , #{amountPerPage}
     </select>
 
     <select id="getPostCount" resultType="Long">
