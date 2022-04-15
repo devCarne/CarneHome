@@ -28,6 +28,14 @@
         limit #{offset} , #{amountPerPage}
     </select>
 
+    <select id="getHighlightList" resultType="stu.kms.carnehome.domain.PostVO">
+        select postNo, title, content, username, postDate, updateDate, replyCount
+        from CARNEHOME_POST
+        where highlight = 1
+        order by postNo desc
+        limit 5
+    </select>
+
     <select id="getPostCount" resultType="Long">
         select count(*) from CARNEHOME_POST where POSTNO > 0
     </select>
@@ -39,7 +47,7 @@
 
     <update id="modify">
         update CARNEHOME_POST
-        set TITLE = #{title}, CONTENT = #{content}, USERNAME = #{userName}, UPDATEDATE = sysdate
+        set TITLE = #{title}, CONTENT = #{content}, USERNAME = #{userName}, UPDATEDATE = sysdate()
         where POSTNO = #{postNo}
     </update>
 
@@ -49,10 +57,10 @@
 
     <insert id="write">
         <selectKey keyProperty="postNo" order="BEFORE" resultType="long">
-            select SEQ_CARNEHOME_POST.nextval from dual
+            select nextval(SEQ_CARNEHOME_POST)
         </selectKey>
-        INSERT into CARNEHOME_POST (POSTNO, TITLE, CONTENT, USERNAME)
-        values (#{postNo}, #{title}, #{content}, #{userName})
+        INSERT into CARNEHOME_POST (POSTNO, TITLE, CONTENT, USERNAME, HIGHLIGHT)
+        values (#{postNo}, #{title}, #{content}, #{userName}, #{highlight})
     </insert>
 
     <update id="updateReplyCount">

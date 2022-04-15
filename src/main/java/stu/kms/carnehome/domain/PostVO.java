@@ -13,6 +13,7 @@ public class PostVO {
     private String userName;
     private Date postDate;
     private Date updateDate;
+    private boolean highlight;
 
     private int replyCount;
 

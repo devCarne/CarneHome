@@ -10,6 +10,8 @@ public interface PostService {
 
     List<PostVO> getList(PageVO pageVO);
 
+    List<PostVO> getHighlightList();
+
     Long getPostCount();
 
     PostVO getPost(Long postNo);

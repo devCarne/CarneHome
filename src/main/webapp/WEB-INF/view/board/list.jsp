@@ -66,6 +66,37 @@
                     <th class="col-1">수정일</th>
                 </tr>
                 </thead>
+
+                <c:forEach items="${highlightList}" var="highlightPost">
+                    <tr class="highlight">
+                            <%--                글번호--%>
+                        <td class="table-center">
+                                ${highlightPost.postNo}
+                        </td>
+                            <%--                제목--%>
+                        <td>
+                            <a class="post-link" href="<c:out value='${highlightPost.postNo}'/>">
+                                <c:out value="${highlightPost.title}"/>
+                                <b>
+                                    [<c:out value="${highlightPost.replyCount}"/>]
+                                </b>
+                            </a>
+                        </td>
+                            <%--                작성자    --%>
+                        <td>
+                                ${highlightPost.userName}
+                        </td>
+                            <%--                작성일--%>
+                        <td class="table-center">
+                            <fmt:formatDate value="${highlightPost.postDate}" pattern="yyyy-MM-dd"/>
+                        </td>
+                            <%--                수정일--%>
+                        <td class="table-center">
+                            <fmt:formatDate value="${highlightPost.updateDate}" pattern="yyyy-MM-dd"/>
+                        </td>
+                    </tr>
+                </c:forEach>
+
                 <c:forEach items="${postList}" var="post">
                     <tr>
                             <%--                글번호--%>

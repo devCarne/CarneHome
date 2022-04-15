@@ -11,6 +11,8 @@ public interface PostMapper {
 
     List<PostVO> getList(PageVO pageVO);
 
+    List<PostVO> getHighlightList();
+
     Long getPostCount();
 
     PostVO getPost(Long postNo);

@@ -31,6 +31,7 @@ public class ReplyController {
         log.info("reply.list() : " + postNo + ";" + replyPage);
 
         PageVO pageVO = new PageVO(replyPage, 50);
+        pageVO.setOffset();
         PageDTO pageDTO = new PageDTO(pageVO, service.getReplyCount(postNo));
 
         Map<String, Object> resultMap = new HashMap<>();

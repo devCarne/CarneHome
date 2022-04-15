@@ -45,8 +45,10 @@ public class BoardController {
     @GetMapping("/list")
     public void list(PageVO pageVO, Model model) {
         log.info("list() : " + pageVO);
+
         pageVO.setOffset();
         model.addAttribute("postList", service.getList(pageVO));
+        model.addAttribute("highlightList", service.getHighlightList());
         model.addAttribute("pageDTO", new PageDTO(pageVO, service.getPostCount()));
     }
 

@@ -28,6 +28,14 @@
             <div class="col-sm-5">
                 <input type="text" class="form-control" id="title" name="title" maxlength="100" required>
             </div>
+
+            <sec:authorize access="hasAuthority('SUPER')">
+                <div class="col">
+                    <input type="checkbox" class="form-check-input" id="highlight" name="highlight">
+                    <label for="highlight" class="form-check-label">강조하기</label>
+                </div>
+            </sec:authorize>
+
         </div>
 
         <hr>

@@ -11,6 +11,7 @@ import stu.kms.carnehome.domain.PostVO;
 import stu.kms.carnehome.mapper.AttachMapper;
 import stu.kms.carnehome.mapper.PostMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,7 +26,17 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public List<PostVO> getList(PageVO pageVO) {
-        return mapper.getList(pageVO);
+        List<PostVO> postList = mapper.getList(pageVO);
+        List<PostVO> highlightList = mapper.getHighlightList();
+
+        postList.removeAll(highlightList);
+
+        return postList;
+    }
+
+    @Override
+    public List<PostVO> getHighlightList() {
+        return mapper.getHighlightList();
     }
 
     @Override
