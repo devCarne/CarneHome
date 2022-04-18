@@ -11,6 +11,8 @@ public interface MemberService {
 
     String idCheck(String userid);
 
+    String usernameCheck(String username);
+
     String pwCheck(String userid, String originalPw);
 
 }

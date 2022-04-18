@@ -32,10 +32,12 @@
 
 </style>
 <main>
-    <div class="container px-4 py-5" id="custom-cards">
-        <h2 class="pb-2 border-bottom">프로젝트 정보</h2>
+    <div class="container" id="custom-cards">
+        <div class="col py-3 border-bottom">
+            <h2>프로젝트 정보</h2>
+        </div>
 
-        <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+        <div class="row row-cols-1 row-cols-lg-3 align-items-stretch">
             <div class="col">
                 <a href="https://github.com/devCarne/CarneHome" target="_blank">
                     <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg"
@@ -87,6 +89,12 @@
                 </div>
             </div>
             <div class="col d-flex align-items-center">
+                <img class="icons" src="/resources/img/icons/aws.png">
+                <div>
+                    <h4 class="fw-bold">AWS EC2, RDS</h4>
+                </div>
+            </div>
+            <div class="col d-flex align-items-center">
                 <img class="icons" src="/resources/img/icons/mybatis.png">
                 <div>
                     <h4 class="fw-bold">Mybatis</h4>
@@ -105,9 +113,9 @@
                 </div>
             </div>
             <div class="col d-flex align-items-center">
-                <img class="icons" src="/resources/img/icons/tomcat.png">
+                <img class="icons" src="/resources/img/icons/jquery.png">
                 <div>
-                    <h4 class="fw-bold">Apache Tomcat</h4>
+                    <h4 class="fw-bold">jQuery</h4>
                 </div>
             </div>
             <div class="col d-flex align-items-center">
@@ -117,9 +125,24 @@
                 </div>
             </div>
             <div class="col d-flex align-items-center">
+                <div>
+                </div>
+            </div>
+
+            <div class="col d-flex align-items-center">
                 <img class="icons" src="/resources/img/icons/bootstrap.png">
                 <div>
                     <h4 class="fw-bold">Bootstrap</h4>
+                </div>
+            </div>
+            <div class="col d-flex align-items-center">
+                <img class="icons" src="/resources/img/icons/git.png">
+                <div>
+                    <h4 class="fw-bold">git</h4>
+                </div>
+            </div>
+            <div class="col d-flex align-items-center">
+                <div>
                 </div>
             </div>
         </div>

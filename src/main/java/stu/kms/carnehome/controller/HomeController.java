@@ -35,9 +35,16 @@ public class HomeController {
 
     @PostMapping(value = "/idCheck")
     @ResponseBody
-    public ResponseEntity<String> idCheck(String userid){
+    public ResponseEntity<String> idCheck(String userid) {
         log.info("idCheck() : " + userid);
         return new ResponseEntity<>(service.idCheck(userid), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/usernameCheck")
+    @ResponseBody
+    public ResponseEntity<String> usernameCheck(String username) {
+        log.info("idCheck() : " + username);
+        return new ResponseEntity<>(service.usernameCheck(username), HttpStatus.OK);
     }
 
     @PostMapping("/signUp")
@@ -52,8 +59,8 @@ public class HomeController {
     @GetMapping("/signIn")
     @PreAuthorize("isAnonymous()")
     public void signIn(
-            @RequestParam(value = "error", required = false)String error,
-            @RequestParam(value = "exception", required = false)String exception,
+            @RequestParam(value = "error", required = false) String error,
+            @RequestParam(value = "exception", required = false) String exception,
             Model model) {
         log.info("signIn() : " + error, exception);
 
@@ -86,6 +93,16 @@ public class HomeController {
 
     @GetMapping("/accessDenied")
     public void AccessDenied() {
+
+    }
+
+    @GetMapping("/activity")
+    public void activity() {
+
+    }
+
+    @GetMapping("/contact")
+    public void contact() {
 
     }
 }

@@ -35,7 +35,12 @@
 
                         <div class="col-7">
                             <label for="username" class="form-label">닉네임</label>
-                            <input type="text" class="form-control" id="username" name="username" required maxlength="100">
+                            <input type="text" class="form-control" id="username" name="username" required onkeyup="usernameCheck()" maxlength="100">
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label for="usernameCheck" class="form-label">&nbsp</label><br>
+                            <div id="usernameCheck"></div>
                         </div>
 
                         <div class="col-7">
@@ -113,21 +118,44 @@
                 } else if (result === "ok") {
                     $("#idCheck").html("사용 가능한 아이디입니다.");
                 }
-            },
-            error: function (error) {
-                // console.log(error)
-            },
+            }
         });
     }
 
     function submitCheck() {
-        let check = $("#idCheck").text();
+        let idCheckResult = $("#idCheck").text();
+        let usernameCheckResult = $("#usernameCheck").text();
 
-        if (check === "중복된 아이디입니다.") {
+        if (idCheckResult === "중복된 아이디입니다.") {
             alert("다른 아이디를 입력해주세요.");
             $("#userid").focus();
             return false;
         }
+
+        if (usernameCheckResult === "중복된 닉네임입니다.") {
+            alert("다른 닉네임을 입력해주세요.");
+            $("#username").focus();
+            return false;
+        }
     }
+
+    function usernameCheck() {
+        let username = $("#username").val();
+        $.ajax({
+            url: "/usernameCheck",
+            type: "POST",
+            data: {username: username},
+            dataType: 'text',
+            success: function (result) {
+                console.log(result)
+                if (result === "dup") {
+                    $("#usernameCheck").html("중복된 닉네임입니다.");
+                } else if (result === "ok") {
+                    $("#usernameCheck").html("사용 가능한 닉네임입니다.");
+                }
+            }
+        });
+    }
+
 </script>
 </body>

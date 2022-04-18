@@ -49,6 +49,13 @@
         where mem.USERID = #{userid}
     </select>
 
+    <select id="loadUserByUsername" resultMap="memberMap">
+        select mem.USERID, USERPW, USERNAME, USERMAIL, ENABLED, REGDATE, UPDATEDATE, AUTH
+        from CARNEHOME_MEMBER mem
+                 left outer join CARNEHOME_MEMBER_AUTH auth on mem.USERID = auth.USERID
+        where mem.USERNAME = #{username}
+    </select>
+
     <select id="pwCheck" resultType="String">
         select USERPW from CARNEHOME_MEMBER where USERID = #{userid}
     </select>

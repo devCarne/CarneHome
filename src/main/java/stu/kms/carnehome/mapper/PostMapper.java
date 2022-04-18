@@ -23,5 +23,7 @@ public interface PostMapper {
 
     void write(PostVO post);
 
+    void disableHighlight();
+
     void updateReplyCount(Long postNo, int amount);
 }

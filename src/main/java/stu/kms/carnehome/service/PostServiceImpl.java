@@ -26,12 +26,7 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public List<PostVO> getList(PageVO pageVO) {
-        List<PostVO> postList = mapper.getList(pageVO);
-        List<PostVO> highlightList = mapper.getHighlightList();
-
-        postList.removeAll(highlightList);
-
-        return postList;
+        return mapper.getList(pageVO);
     }
 
     @Override
@@ -81,6 +76,7 @@ public class PostServiceImpl implements PostService{
     @Override
     @Transactional
     public void write(PostVO post) {
+        mapper.disableHighlight();
         mapper.write(post);
 
         //첨부파일이 없으면 여기서 종료

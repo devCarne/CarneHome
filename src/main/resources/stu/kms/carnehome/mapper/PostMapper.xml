@@ -6,17 +6,20 @@
 
     <sql id="searchTypeSql">
         <choose>
+            <when test="searchType == null">
+
+            </when>
             <when test="searchType == 'T'.toString()">
-                where title like Concat('%',Ifnull(#{keyword}, ''),'%')
+                title like Concat('%',Ifnull(#{keyword}, ''),'%') and
             </when>
             <when test="searchType == 'C'.toString()">
-                where content like Concat('%',Ifnull(#{keyword}, ''),'%')
+                content like Concat('%',Ifnull(#{keyword}, ''),'%') and
             </when>
             <when test="searchType == 'U'.toString()">
-                where username like Concat('%',Ifnull(#{keyword}, ''),'%')
+                username like Concat('%',Ifnull(#{keyword}, ''),'%') and
             </when>
             <when test="searchType == 'TC'.toString()">
-                where title like Concat('%',Ifnull(#{keyword}, ''),'%') OR content like Concat('%',Ifnull(#{keyword}, ''),'%')
+                title like Concat('%',Ifnull(#{keyword}, ''),'%') OR content like Concat('%',Ifnull(#{keyword}, ''),'%') and
             </when>
         </choose>
     </sql>
@@ -24,7 +27,7 @@
     <select id="getList" resultType="stu.kms.carnehome.domain.PostVO">
         select postNo, title, content, username, postDate, updateDate, replyCount
         from CARNEHOME_POST
-        <include refid="searchTypeSql"/> order by postNo desc
+        where <include refid="searchTypeSql"/> highlight = 0 order by postNo desc
         limit #{offset} , #{amountPerPage}
     </select>
 
@@ -62,6 +65,10 @@
         INSERT into CARNEHOME_POST (POSTNO, TITLE, CONTENT, USERNAME, HIGHLIGHT)
         values (#{postNo}, #{title}, #{content}, #{userName}, #{highlight})
     </insert>
+
+    <update id="disableHighlight">
+        update carnehome_post set highlight = 0 where postNo = (select min(postNo) from carnehome_post where highlight = 1);
+    </update>
 
     <update id="updateReplyCount">
         update CARNEHOME_POST set REPLYCOUNT = REPLYCOUNT + #{amount} where POSTNO = #{postNo}

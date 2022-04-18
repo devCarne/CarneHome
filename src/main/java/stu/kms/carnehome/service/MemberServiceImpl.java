@@ -62,6 +62,16 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
+    public String usernameCheck(String username) {
+        MemberVO member = mapper.loadUserByUsername(username);
+        if (member == null) {
+            return "ok";
+        } else {
+            return "dup";
+        }
+    }
+
+    @Override
     public String pwCheck(String userid, String originalPw) {
         if (passwordEncoder.matches(originalPw, mapper.pwCheck(userid))) {
             return "ok";

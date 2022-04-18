@@ -15,7 +15,9 @@ public interface MemberMapper {
 
     void deleteAuth(String userid);
 
-    MemberVO loadUser(String username);
+    MemberVO loadUser(String userid);
+
+    MemberVO loadUserByUsername(String username);
 
     String pwCheck(String userid);
 }
