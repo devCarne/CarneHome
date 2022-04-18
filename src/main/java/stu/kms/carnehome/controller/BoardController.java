@@ -100,6 +100,7 @@ public class BoardController {
             post.setContent("삭제된 글입니다.");
             post.setUserName("관리자");
             service.modify(post);
+            redirectAttributes.addFlashAttribute("result", postNo + "번 글이 삭제처리 되었습니다. 댓글 내용은 보존됩니다.");
         }
         return "redirect:/board/list" + pageVO.getPageUrl();
     }

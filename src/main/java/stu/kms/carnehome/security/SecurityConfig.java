@@ -79,8 +79,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .deleteCookies("remember-me");
 
-//        http.exceptionHandling()
-//                .accessDeniedHandler(customAccessDeniedHandler);
+        http.exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler());
 
         http.rememberMe()
                 .tokenRepository(tokenRepository())

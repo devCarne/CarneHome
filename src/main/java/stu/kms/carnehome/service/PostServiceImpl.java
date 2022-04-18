@@ -76,7 +76,9 @@ public class PostServiceImpl implements PostService{
     @Override
     @Transactional
     public void write(PostVO post) {
-        mapper.disableHighlight();
+        if (mapper.getHighlightList().size() >= 5) {
+            mapper.disableHighlight();
+        }
         mapper.write(post);
 
         //첨부파일이 없으면 여기서 종료
