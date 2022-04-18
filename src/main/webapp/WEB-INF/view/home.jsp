@@ -77,49 +77,49 @@
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
             <div class="col d-flex align-items-center">
-                <img class="icons" src="/resources/img/icons/springBoot.png">
+                <img class="icons" src="<c:url value="/resources/img/icons/springBoot.png"/>">
                 <div>
                     <h4 class="fw-bold">Spring Boot</h4>
                 </div>
             </div>
             <div class="col d-flex align-items-center">
-                <img class="icons" src="/resources/img/icons/springSecurity.png">
+                <img class="icons" src="<c:url value="/resources/img/icons/springSecurity.png"/>">
                 <div>
                     <h4 class="fw-bold">Spring Security</h4>
                 </div>
             </div>
             <div class="col d-flex align-items-center">
-                <img class="icons" src="/resources/img/icons/aws.png">
+                <img class="icons" src="<c:url value="/resources/img/icons/aws.png"/>">
                 <div>
                     <h4 class="fw-bold">AWS EC2, RDS</h4>
                 </div>
             </div>
             <div class="col d-flex align-items-center">
-                <img class="icons" src="/resources/img/icons/mybatis.png">
+                <img class="icons" src="<c:url value="/resources/img/icons/mybatis.png"/>">
                 <div>
                     <h4 class="fw-bold">Mybatis</h4>
                 </div>
             </div>
             <div class="col d-flex align-items-center">
-                <img class="icons" src="/resources/img/icons/oracleDB.png">
+                <img class="icons" src="<c:url value="/resources/img/icons/oracleDB.png"/>">
                 <div>
                     <h4 class="fw-bold">OracleDB</h4>
                 </div>
             </div>
             <div class="col d-flex align-items-center">
-                <img class="icons" src="/resources/img/icons/mariaDB.png">
+                <img class="icons" src="<c:url value="/resources/img/icons/mariaDB.png"/>">
                 <div>
                     <h4 class="fw-bold">MariaDB</h4>
                 </div>
             </div>
             <div class="col d-flex align-items-center">
-                <img class="icons" src="/resources/img/icons/jquery.png">
+                <img class="icons" src="<c:url value="/resources/img/icons/jquery.png"/>">
                 <div>
                     <h4 class="fw-bold">jQuery</h4>
                 </div>
             </div>
             <div class="col d-flex align-items-center">
-                <img class="icons" src="/resources/img/icons/jsp.png">
+                <img class="icons" src="<c:url value="/resources/img/icons/jsp.png"/>">
                 <div>
                     <h4 class="fw-bold">.JSP</h4>
                 </div>
@@ -130,13 +130,13 @@
             </div>
 
             <div class="col d-flex align-items-center">
-                <img class="icons" src="/resources/img/icons/bootstrap.png">
+                <img class="icons" src="<c:url value="/resources/img/icons/bootstrap.png"/>">
                 <div>
                     <h4 class="fw-bold">Bootstrap</h4>
                 </div>
             </div>
             <div class="col d-flex align-items-center">
-                <img class="icons" src="/resources/img/icons/git.png">
+                <img class="icons" src="<c:url value="/resources/img/icons/git.png"/>">
                 <div>
                     <h4 class="fw-bold">git</h4>
                 </div>
