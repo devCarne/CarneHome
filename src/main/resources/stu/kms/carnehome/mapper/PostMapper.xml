@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="stu.kms.carnehome.mapper.PostMapper">
+
+    <sql id="searchTypeSql">
+        <choose>
+            <when test="searchType == null">
+
+            </when>
+            <when test="searchType == 'T'.toString()">
+                title like Concat('%',Ifnull(#{keyword}, ''),'%') and
+            </when>
+            <when test="searchType == 'C'.toString()">
+                content like Concat('%',Ifnull(#{keyword}, ''),'%') and
+            </when>
+            <when test="searchType == 'U'.toString()">
+                username like Concat('%',Ifnull(#{keyword}, ''),'%') and
+            </when>
+            <when test="searchType == 'TC'.toString()">
+                title like Concat('%',Ifnull(#{keyword}, ''),'%') OR content like Concat('%',Ifnull(#{keyword}, ''),'%') and
+            </when>
+        </choose>
+    </sql>
+
+    <select id="getList" resultType="stu.kms.carnehome.domain.PostVO">
+        select postNo, title, content, username, postDate, updateDate, replyCount
+        from carnehome_post
+        where <include refid="searchTypeSql"/> highlight = 0 order by postNo desc
+        limit #{offset} , #{amountPerPage}
+    </select>
+
+    <select id="getHighlightList" resultType="stu.kms.carnehome.domain.PostVO">
+        select postNo, title, content, username, postDate, updateDate, replyCount
+        from carnehome_post
+        where highlight = 1
+        order by postNo desc
+        limit 5
+    </select>
+
+    <select id="getPostCount" resultType="Long">
+        select count(*) from carnehome_post where postNo > 0
+    </select>
+
+    <select id="getPost" resultType="stu.kms.carnehome.domain.PostVO">
+        select * from carnehome_post
+        where POSTNO = #{postNo}
+    </select>
+
+    <update id="modify">
+        update carnehome_post
+        set title = #{title}, content = #{content}, username = #{userName}, updateDate = sysdate()
+        where postNo = #{postNo}
+    </update>
+
+    <delete id="delete">
+        delete from carnehome_post where postNo = #{postNo}
+    </delete>
+
+    <insert id="write">
+        <selectKey keyProperty="postNo" order="BEFORE" resultType="long">
+            select nextval(seq_carnehome_post)
+        </selectKey>
+        INSERT into carnehome_post (postNo, title, content, username, highlight)
+        values (#{postNo}, #{title}, #{content}, #{userName}, #{highlight})
+    </insert>
+
+    <update id="disableHighlight">
+        update carnehome_post set highlight = 0 where postNo = (select min(postNo) from carnehome_post where highlight = 1);
+    </update>
+
+    <update id="updateReplyCount">
+        update carnehome_post set replyCount = replyCount + #{amount} where postNo = #{postNo}
+    </update>
+</mapper>

@@ -1,0 +1,89 @@
+create table CarneHome_Member(
+    userid varchar2(30) not null primary key ,
+    userpw varchar2(100) not null ,
+    username varchar2(100) not null ,
+    usermail varchar2(100),
+    enabled char(1) default '1',
+    regdate date default sysdate,
+    updatedate date default sysdate
+);
+
+create table CarneHome_Member_auth(
+    userid varchar2(30) not null ,
+    auth varchar2(50) not null ,
+    constraint fk_CarneHome_Member_auth foreign key (userid) references CARNEHOME_MEMBER (userid)
+);
+
+select * from CARNEHOME_MEMBER_AUTH;
+------------------------------------------------------------------------------
+
+create table CarneHome_Post(
+    postNo number(10,0),
+    title varchar2(100) not null ,
+    content varchar2(2000) not null ,
+    username varchar2(100) not null ,
+    postDate date default sysdate,
+    updateDate date default sysdate,
+    replyCount number default 0
+);
+
+alter table CarneHome_Post add constraint pk_post primary key (postNo);
+create sequence seq_CarneHome_post;
+
+insert into CARNEHOME_POST (postNo, title, content, username)
+VALUES (seq_CarneHome_post.nextval, '글제목입니다', '글내용입니다', '테스터입니다');
+
+insert into CarneHome_Post (postNo, title, content, username)(select seq_CarneHome_post.nextval, title, content, username from CarneHome_Post);
+
+---------------------------------------------------------------------------------
+
+create table CarneHome_Attach(
+    uuid varchar2(100) not null ,
+    uploadPath varchar2(200) not null ,
+    fileName varchar2(100) not null ,
+    fileType Char(1) default 'I',
+    postNo number(10,0)
+);
+
+alter table CarneHome_Attach add constraint PK_CarneHome_Attach primary key (uuid);
+alter table  CarneHome_Attach add constraint FK_CarneHome_Attach foreign key (postNo) references CarneHome_Post(postNo);
+
+---------------------------------------------------------------------------------
+create table CarneHome_Reply(
+    replyNo number(10,0),
+    postNo number(10,0) not null ,
+    replyContent varchar2(1000) not null ,
+    userName varchar2(100) not null ,
+    replyDate date default sysdate,
+    updateDate date default sysdate
+);
+
+create sequence seq_carnehome_reply;
+
+alter table CARNEHOME_REPLY add constraint PK_CarneHome_Reply primary key (replyNo);
+alter table CarneHome_Reply add constraint FK_CarneHome_Reply foreign key (postNo) references CarneHome_Post (POSTNO);
+create index INDEX_CarneHome_Reply on CarneHome_Reply (postNo desc, replyNo asc);
+
+insert into CarneHome_Reply (replyNo, postNo, replyContent, userName)
+values (seq_carnehome_reply.nextval, '1554', '다른사람이쓴댓글', '이방인');
+insert into CarneHome_Reply (replyNo, postNo, replyContent, userName) (select seq_carnehome_reply.nextval, postNo, replyContent, userName from CarneHome_Reply);
+
+-----------------------------------------------------------------------------------------
+create table CarneHome_SuperPost(
+    postNo number(10,0),
+    title varchar2(100) not null ,
+    content varchar2(2000) not null ,
+    username varchar2(100) not null ,
+    postDate date default sysdate,
+    updateDate date default sysdate,
+    replyCount number default 0
+);
+
+drop table CARNEHOME_SUPERPOST;
+
+-- Transaction --
+
+alter table tbl_board add (replycnt number default 0);
+
+update tbl_board set replycnt = (select count(rno) from tbl_reply where tbl_reply.bno = tbl_board.bno);
+
