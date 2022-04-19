@@ -3,7 +3,7 @@
 <mapper namespace="stu.kms.carnehome.mapper.AttachMapper">
 
     <insert id="insert">
-        insert into carnehome_attach values (#{uuid}, #{uploadPath}, #{fileName}, #{fileType}, #{postNo})
+        insert into carnehome_attach values (#{path}, #{fileType}, #{postNo})
     </insert>
 
     <delete id="deleteAll">

@@ -82,28 +82,28 @@ public class BoardController {
         return "redirect:/board/list" + pageVO.getPageUrl();
     }
 
-    @PostMapping("/delete")
-    public String delete(Long postNo, PageVO pageVO, RedirectAttributes redirectAttributes) {
-        log.info("delete() : " + postNo + ";" + pageVO + ";");
-
-        List<PostAttachVO> attachList = service.getAttachList(postNo);
-        deleteFiles(attachList);
-
-        if (replyService.getReplyCount(postNo) == 0) {
-            service.delete(postNo);
-            redirectAttributes.addFlashAttribute("result", postNo + "번 글의 삭제가 완료되었습니다.");
-
-        } else {
-            PostVO post = new PostVO();
-            post.setPostNo(postNo);
-            post.setTitle("삭제된 글입니다.");
-            post.setContent("삭제된 글입니다.");
-            post.setUserName("관리자");
-            service.modify(post);
-            redirectAttributes.addFlashAttribute("result", postNo + "번 글이 삭제처리 되었습니다. 댓글 내용은 보존됩니다.");
-        }
-        return "redirect:/board/list" + pageVO.getPageUrl();
-    }
+//    @PostMapping("/delete")
+//    public String delete(Long postNo, PageVO pageVO, RedirectAttributes redirectAttributes) {
+//        log.info("delete() : " + postNo + ";" + pageVO + ";");
+//
+//        List<PostAttachVO> attachList = service.getAttachList(postNo);
+//        deleteFiles(attachList);
+//
+//        if (replyService.getReplyCount(postNo) == 0) {
+//            service.delete(postNo);
+//            redirectAttributes.addFlashAttribute("result", postNo + "번 글의 삭제가 완료되었습니다.");
+//
+//        } else {
+//            PostVO post = new PostVO();
+//            post.setPostNo(postNo);
+//            post.setTitle("삭제된 글입니다.");
+//            post.setContent("삭제된 글입니다.");
+//            post.setUserName("관리자");
+//            service.modify(post);
+//            redirectAttributes.addFlashAttribute("result", postNo + "번 글이 삭제처리 되었습니다. 댓글 내용은 보존됩니다.");
+//        }
+//        return "redirect:/board/list" + pageVO.getPageUrl();
+//    }
 
     @GetMapping(value = "/getAttachList", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -130,21 +130,21 @@ public class BoardController {
         return "redirect:/board/list";
     }
 
-    private void deleteFiles(List<PostAttachVO> attachList) {
-        if (attachList == null || attachList.size() == 0) return;
-
-        for (PostAttachVO attach : attachList) {
-            try {
-                Path file = Paths.get(uploadFolder + attach.getUploadPath() + "\\" + attach.getUuid() + "_" + attach.getFileName());
-                Files.deleteIfExists(file);
-
-                if (Files.probeContentType(file).startsWith("image")) {
-                    Path thumbnail = Paths.get(uploadFolder + attach.getUploadPath() + "\\s_" + attach.getUuid() + "_" + attach.getFileName());
-                    Files.delete(thumbnail);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    private void deleteFiles(List<PostAttachVO> attachList) {
+//        if (attachList == null || attachList.size() == 0) return;
+//
+//        for (PostAttachVO attach : attachList) {
+//            try {
+//                Path file = Paths.get(uploadFolder + attach.getUploadPath() + "\\" + attach.getUuid() + "_" + attach.getFileName());
+//                Files.deleteIfExists(file);
+//
+//                if (Files.probeContentType(file).startsWith("image")) {
+//                    Path thumbnail = Paths.get(uploadFolder + attach.getUploadPath() + "\\s_" + attach.getUuid() + "_" + attach.getFileName());
+//                    Files.delete(thumbnail);
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 }

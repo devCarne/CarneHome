@@ -117,20 +117,18 @@
         function showUploadResult(result) {
             if (!result || result.length === 0) return;
 
-            let fileCallPath;
             let str = "";
 
             $(result).each(function (i, file) {
                 if (file.image) {
-                    fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);
 
                     str +=
-                        "<li class='nav align-items-center' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-filename='" + file.fileName + "' data-type='" + file.image + "'>" +
+                        "<li class='nav align-items-center' data-path='" + file.fileUrl + "' data-filename='" + file.fileName + "' data-type='" + file.image + "'>" +
                         "   <div class='col-1'>" +
-                        "       <img src='/showImage?fileName=" + fileCallPath + "'>" +
+                        "       <img src='" + file.fileUrl + "' style='width: 100px'>" +
                         "   </div>" +
                         "   <div class='col-1'>" +
-                        "       <button type='button' data-file=\'" + fileCallPath + "\' data-type='image' class='btn btn-warning btn-circle'>" +
+                        "       <button type='button' class='btn btn-warning btn-circle'>" +
                         "           <i class='fa fa-times'></i>" +
                         "       </button>" +
                         "   </div>" +
@@ -139,14 +137,13 @@
                         "   </div>" +
                         "</li>"
                 } else {
-                    fileCallPath = encodeURIComponent(file.uploadPath + "/" + file.uuid + "_" + file.fileName);
                     str +=
-                        "<li class='nav  align-items-center' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-filename='" + file.fileName + "' data-type='" + file.image + "'>" +
+                        "<li class='nav  align-items-center' data-path='" + file.fileUrl + "' data-filename='" + file.fileName + "' data-type='" + file.image + "'>" +
                         "   <div class='col-1'>" +
                         "       <img src='/resources/img/attach.png' style='width: 100px'>" +
                         "   </div>" +
                         "   <div class='col-1'>" +
-                        "       <button type='button' data-file=\'" + fileCallPath + "\' data-type='file' class='btn btn-warning btn-circle'>" +
+                        "       <button type='button' class='btn btn-warning btn-circle'>" +
                         "           <i class='fa fa-times'></i>" +
                         "       </button>" +
                         "   </div>" +
@@ -163,7 +160,6 @@
         $("#fileUpload").change(function () {
             let uploadForm = new FormData;
             let files = $(this)[0].files;
-            console.log(files);
 
             for (let i = 0; i < files.length; i++) {
                 if (!checkExtension(files[i].size)) {

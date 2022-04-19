@@ -26,43 +26,43 @@
 
     <select id="getList" resultType="stu.kms.carnehome.domain.PostVO">
         select postNo, title, content, username, postDate, updateDate, replyCount
-        from CARNEHOME_POST
+        from carnehome_post
         where <include refid="searchTypeSql"/> highlight = 0 order by postNo desc
         limit #{offset} , #{amountPerPage}
     </select>
 
     <select id="getHighlightList" resultType="stu.kms.carnehome.domain.PostVO">
         select postNo, title, content, username, postDate, updateDate, replyCount
-        from CARNEHOME_POST
+        from carnehome_post
         where highlight = 1
         order by postNo desc
         limit 5
     </select>
 
     <select id="getPostCount" resultType="Long">
-        select count(*) from CARNEHOME_POST where POSTNO > 0
+        select count(*) from carnehome_post where postNo > 0
     </select>
 
     <select id="getPost" resultType="stu.kms.carnehome.domain.PostVO">
-        select * from CARNEHOME_POST
+        select * from carnehome_post
         where POSTNO = #{postNo}
     </select>
 
     <update id="modify">
-        update CARNEHOME_POST
-        set TITLE = #{title}, CONTENT = #{content}, USERNAME = #{userName}, UPDATEDATE = sysdate()
-        where POSTNO = #{postNo}
+        update carnehome_post
+        set title = #{title}, content = #{content}, username = #{userName}, updateDate = sysdate()
+        where postNo = #{postNo}
     </update>
 
     <delete id="delete">
-        delete from CARNEHOME_POST where POSTNO = #{postNo}
+        delete from carnehome_post where postNo = #{postNo}
     </delete>
 
     <insert id="write">
         <selectKey keyProperty="postNo" order="BEFORE" resultType="long">
-            select nextval(SEQ_CARNEHOME_POST)
+            select nextval(seq_carnehome_post)
         </selectKey>
-        INSERT into CARNEHOME_POST (POSTNO, TITLE, CONTENT, USERNAME, HIGHLIGHT)
+        INSERT into carnehome_post (postNo, title, content, username, highlight)
         values (#{postNo}, #{title}, #{content}, #{userName}, #{highlight})
     </insert>
 
@@ -71,6 +71,6 @@
     </update>
 
     <update id="updateReplyCount">
-        update CARNEHOME_POST set REPLYCOUNT = REPLYCOUNT + #{amount} where POSTNO = #{postNo}
+        update carnehome_post set replyCount = replyCount + #{amount} where postNo = #{postNo}
     </update>
 </mapper>
