@@ -3,25 +3,25 @@
 <mapper namespace="stu.kms.carnehome.mapper.MemberMapper">
 
     <insert id="signUp">
-        insert into CARNEHOME_MEMBER (USERID, USERPW, USERNAME, USERMAIL)
+        insert into carnehome_member (userid, userpw, username, usermail)
         values (#{userid}, #{userpw}, #{username}, #{usermail})
     </insert>
 
     <insert id="signUpAuth">
-        insert into CARNEHOME_MEMBER_AUTH (USERID, AUTH)
+        insert into carnehome_member_auth (userid, auth)
         values (#{userid}, #{auth})
     </insert>
 
     <update id="modify">
-        update CARNEHOME_MEMBER
+        update carnehome_member
         set
-            USERPW = #{userpw},
-            USERMAIL = #{usermail}
-        where USERID = #{userid}
+            userpw = #{userpw},
+            usermail = #{usermail}
+        where userid = #{userid}
     </update>
 
     <update id="deleteAuth">
-        delete from CARNEHOME_MEMBER_AUTH where USERID = #{userid}
+        delete from carnehome_member_auth where userid = #{userid}
     </update>
 
 
@@ -43,20 +43,20 @@
     </resultMap>
 
     <select id="loadUser" resultMap="memberMap">
-        select mem.USERID, USERPW, USERNAME, USERMAIL, ENABLED, REGDATE, UPDATEDATE, AUTH
-        from CARNEHOME_MEMBER mem
-        left outer join CARNEHOME_MEMBER_AUTH auth on mem.USERID = auth.USERID
-        where mem.USERID = #{userid}
+        select mem.userid, userpw, username, usermail, enabled, regdate, updatedate, auth
+        from carnehome_member mem
+        left outer join carnehome_member_auth auth on mem.userid = auth.userid
+        where mem.userid = #{userid}
     </select>
 
     <select id="loadUserByUsername" resultMap="memberMap">
-        select mem.USERID, USERPW, USERNAME, USERMAIL, ENABLED, REGDATE, UPDATEDATE, AUTH
-        from CARNEHOME_MEMBER mem
-                 left outer join CARNEHOME_MEMBER_AUTH auth on mem.USERID = auth.USERID
-        where mem.USERNAME = #{username}
+        select mem.userid, userpw, username, usermail, enabled, regdate, updatedate, auth
+        from carnehome_member mem
+                 left outer join carnehome_member_auth auth on mem.USERID = auth.USERID
+        where mem.username = #{username}
     </select>
 
     <select id="pwCheck" resultType="String">
-        select USERPW from CARNEHOME_MEMBER where USERID = #{userid}
+        select userpw from carnehome_member where userid = #{userid}
     </select>
 </mapper>
