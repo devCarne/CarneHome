@@ -5,31 +5,31 @@
 <mapper namespace="stu.kms.carnehome.mapper.ReplyMapper">
 
     <select id="list" resultType="stu.kms.carnehome.domain.ReplyVO">
-        select REPLYNO, POSTNO, USERNAME, REPLYCONTENT, REPLYDATE, UPDATEDATE
-        from CARNEHOME_REPLY
-        where POSTNO = #{postNo}
+        select replyNo, postNo, replyContent, userName, replyDate, updateDate
+        from carnehome_reply
+        where postNo = #{postNo}
         limit #{pageVO.offset} , #{pageVO.amountPerPage}
     </select>
 
     <select id="getReply" resultType="stu.kms.carnehome.domain.ReplyVO">
-        select * from CARNEHOME_REPLY where REPLYNO = #{replyNo}
+        select * from carnehome_reply where replyNo = #{replyNo}
     </select>
 
     <select id="getReplyCount" resultType="Long">
-        select count(REPLYNO)
-        from CARNEHOME_REPLY
-        where POSTNO = #{postNo}
+        select count(replyNo)
+        from carnehome_reply
+        where postNo = #{postNo}
     </select>
 
     <insert id="write">
-        insert into CARNEHOME_REPLY (REPLYNO, POSTNO, REPLYCONTENT, USERNAME) VALUES (nextval(seq_carnehome_reply), #{postNo}, #{replyContent}, #{userName})
+        insert into carnehome_reply (replyNo, postNo, replyContent, userName) VALUES (nextval(seq_carnehome_reply), #{postNo}, #{replyContent}, #{userName})
     </insert>
 
     <update id="modify">
-        update CARNEHOME_REPLY set REPLYCONTENT = #{replyContent}, UPDATEDATE = sysdate() where REPLYNO = #{replyNo}
+        update carnehome_reply set replyContent = #{replyContent}, updateDate = sysdate() where replyNo = #{replyNo}
     </update>
 
     <delete id="delete">
-        delete from CARNEHOME_REPLY where REPLYNO = #{replyNo}
+        delete from carnehome_reply where replyNo = #{replyNo}
     </delete>
 </mapper>
