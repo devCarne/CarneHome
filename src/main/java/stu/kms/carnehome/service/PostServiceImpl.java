@@ -49,16 +49,16 @@ public class PostServiceImpl implements PostService{
     public boolean modify(PostVO post) {
         attachMapper.deleteAll(post.getPostNo());
 
-        boolean result = mapper.modify(post) == 1;
-
-        log.info("attach : " + post.getAttachList());
-        if (result && post.getAttachList() != null && post.getAttachList().size() > 0) {
-            for (PostAttachVO attach : post.getAttachList()) {
-                attach.setPostNo(post.getPostNo());
-                attachMapper.insert(attach);
-            }
+        if (post.getAttachList() == null || post.getAttachList().size() <= 0) {
+            return mapper.modify(post) == 1;
         }
-        return result;
+
+        for (PostAttachVO attach : post.getAttachList()) {
+            attach.setPostNo(post.getPostNo());
+            attachMapper.insert(attach);
+        }
+
+        return mapper.modify(post) == 1;
     }
 
     @Override

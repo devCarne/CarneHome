@@ -60,6 +60,10 @@
     .replyResult li i {
         margin-right: 10px;
     }
+
+    .thumbnail {
+        width: 50px;
+    }
 </style>
 
 <sec:authentication property="principal" var="principal"/>
@@ -124,6 +128,7 @@
 
     <hr class="mb40">
 
+    <%--댓글 목록--%>
     <div class="row">
         <div class="col">
             <h4 class="mb40"><i class="fa fa-comment"></i> 댓글</h4>
@@ -141,13 +146,18 @@
             </ul>
         </div>
     </div>
+    <%--댓글 목록--%>
 
+    <%--댓글 페이징--%>
     <div class="row">
         <div class="col reply-paging">
 
         </div>
     </div>
+    <%--댓글 페이징--%>
 
+
+    <%--댓글 작성--%>
     <div class="row justify-content-center">
         <div class="col">
             <h4 class="mb40 font500">댓글 쓰기</h4>
@@ -158,7 +168,8 @@
         <div class="row align-items-baseline">
             <label for="userName" class="col-sm-1 form-label">작성자</label>
             <div class="col-10">
-                <input type="text" class="form-control input-userName" id="userName" value="${principal.member.username}" readonly>
+                <input type="text" class="form-control input-userName" id="userName"
+                       value="${principal.member.username}" readonly>
             </div>
             <div class="col-1">
                 <button type="button" class="btn-reply btn btn-primary">등록</button>
@@ -177,11 +188,12 @@
         </div>
     </form>
 
-        <div class="row">
-            <div class="col text-center">
-                <button class="list-btn btn btn-secondary">목록으로</button>
-            </div>
+    <div class="row">
+        <div class="col text-center">
+            <button class="list-btn btn btn-secondary">목록으로</button>
         </div>
+    </div>
+    <%--댓글 작성--%>
 </div>
 
 <script>
@@ -202,36 +214,30 @@
     // 버튼 처리
 
 
-
-
-
     // 첨부파일 처리
     let postNo = ${post.postNo};
 
     //첨부파일 목록 가져오기
     $.getJSON("/board/getAttachList", {postNo: postNo}, function (result) {
-        let fileCallPath;
         let str = "";
 
         $(result).each(function (i, file) {
-            if (file.fileType) {
-                fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);
+            if (file.image) {
 
                 str +=
-                    "<li class='nav align-items-center' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-filename='" + file.fileName + "' data-type='" + file.fileType + "'>" +
+                    "<li class='nav align-items-center' data-fileurl='" + file.fileUrl + "' data-filename='" + file.fileName + "' data-image='" + file.image + "'>" +
                     "   <div class='col-1'>" +
-                    "       <img src='/showImage?fileName=" + fileCallPath + "'>" +
+                    "       <img class='thumbnail' src='" + file.fileUrl + "'>" +
                     "   </div>" +
                     "   <div class='col-11'>" +
                     "       <span>" + file.fileName + "</span>" +
                     "   </div>" +
                     "</li>"
             } else {
-                fileCallPath = encodeURIComponent(file.uploadPath + "/" + file.uuid + "_" + file.fileName);
                 str +=
-                    "<li class='nav align-items-center' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-filename='" + file.fileName + "' data-type='" + file.fileType + "'>" +
+                    "<li class='nav align-items-center' data-fileurl='" + file.fileUrl + "' data-filename='" + file.fileName + "' data-image='" + file.image + "'>" +
                     "   <div class='col-1'>" +
-                    "       <img src='/resources/img/attach.png' style='width: 100px'>" +
+                    "       <img class='thumbnail' src='/resources/img/attach.png'>" +
                     "   </div>" +
                     "   <div class='col-11'>" +
                     "       <span>" + file.fileName + "</span>" +
@@ -246,17 +252,13 @@
     $(".uploadResult").on("click", "li", function () {
         let li = $(this);
 
-        let fileCallPath = encodeURIComponent(li.data("path") + "/" + li.data("uuid") + "_" + li.data("filename"));
-        if (li.data("type")) {
-            window.open("/showImage?fileName=" + fileCallPath.replace(new RegExp(/\\/g), "/"));
+        if (li.data("image")) {
+            window.open(li.data("fileurl"));
         } else {
-            self.location = "/download?fileName=" + fileCallPath;
+            self.location = "/download?fileUrl=" + li.data("fileurl") + "&fileName=" + li.data("filename");
         }
     });
     //첨부파일 처리
-
-
-
 
 
     //댓글 처리
@@ -374,8 +376,6 @@
             userName: $(".input-userName").val()
         }
 
-        console.log(reply);
-
         if ($(".input-replyContent").val().length === 0) {
             alert("내용을 입력해주세요.")
             return;
@@ -420,8 +420,6 @@
             replyContent: $(".textarea-replyModify").val(),
             userName: $(this).closest("li").data("username")
         }
-
-        console.log(reply);
 
         if ($(".textarea-replyModify").val().length === 0) {
             alert("내용을 입력해주세요.")

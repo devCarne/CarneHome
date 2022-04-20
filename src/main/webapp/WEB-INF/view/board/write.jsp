@@ -5,6 +5,15 @@
 <title>게시판</title>
 <jsp:include page="../includes/header.jsp"/>
 
+<style>
+    #content {
+        resize: none;
+    }
+
+    .thumbnail {
+        width: 50px;
+    }
+</style>
 
 <div class="container">
     <div class="row">
@@ -43,8 +52,7 @@
         <div class="row align-items-baseline">
             <label for="content" class="col-sm-1 form-label">내용</label>
             <div class="col-sm-11">
-                <textarea class="form-control" id="content" name="content" rows="6" maxlength="2000"
-                          style="resize: none" required></textarea>
+                <textarea class="form-control" id="content" name="content" rows="6" maxlength="2000" required></textarea>
             </div>
         </div>
 
@@ -121,11 +129,10 @@
 
             $(result).each(function (i, file) {
                 if (file.image) {
-
                     str +=
-                        "<li class='nav align-items-center' data-path='" + file.fileUrl + "' data-filename='" + file.fileName + "' data-type='" + file.image + "'>" +
+                        "<li class='nav align-items-center' data-fileurl='" + file.fileUrl + "' data-filename='" + file.fileName + "' data-image='" + file.image + "'>" +
                         "   <div class='col-1'>" +
-                        "       <img src='" + file.fileUrl + "' style='width: 100px'>" +
+                        "       <img class='thumbnail' src='" + file.fileUrl + "'>" +
                         "   </div>" +
                         "   <div class='col-1'>" +
                         "       <button type='button' class='btn btn-warning btn-circle'>" +
@@ -138,9 +145,9 @@
                         "</li>"
                 } else {
                     str +=
-                        "<li class='nav  align-items-center' data-path='" + file.fileUrl + "' data-filename='" + file.fileName + "' data-type='" + file.image + "'>" +
+                        "<li class='nav  align-items-center' data-fileurl='" + file.fileUrl + "' data-filename='" + file.fileName + "' data-image='" + file.image + "'>" +
                         "   <div class='col-1'>" +
-                        "       <img src='/resources/img/attach.png' style='width: 100px'>" +
+                        "       <img class='thumbnail' src='/resources/img/attach.png'>" +
                         "   </div>" +
                         "   <div class='col-1'>" +
                         "       <button type='button' class='btn btn-warning btn-circle'>" +
@@ -193,7 +200,7 @@
             $.ajax({
                 url: "/deleteFileAjax",
                 type: "POST",
-                data: {fileName: $(this).data("file"), type: $(this).data("type")},
+                data: {fileUrl: targetLi.data("fileurl")},
                 dataType: "text",
 
                 beforeSend: function (xhr) {
@@ -230,9 +237,8 @@
 
                 str +=
                     "<input type='hidden' name='attachList[" + i + "].fileName' value='" + targetFile.data("filename") + "'>" +
-                    "<input type='hidden' name='attachList[" + i + "].uuid' value='" + targetFile.data("uuid") + "'>" +
-                    "<input type='hidden' name='attachList[" + i + "].uploadPath' value='" + targetFile.data("path") + "'>" +
-                    "<input type='hidden' name='attachList[" + i + "].fileType' value='" + targetFile.data("type") + "'>";
+                    "<input type='hidden' name='attachList[" + i + "].fileUrl' value='" + targetFile.data("fileurl") + "'>" +
+                    "<input type='hidden' name='attachList[" + i + "].image' value='" + targetFile.data("image") + "'>";
             });
             $(".write-form").append(str).submit();
         });

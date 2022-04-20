@@ -34,8 +34,6 @@ import java.util.List;
 @RequestMapping("/board/*")
 public class BoardController {
 
-    String uploadFolder = "C:\\upload\\carnehome\\";
-
     @Setter(onMethod_ = @Autowired)
     private PostService service;
 

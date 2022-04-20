@@ -6,6 +6,12 @@
 <jsp:include page="../includes/header.jsp"/>
 <sec:authentication property="principal" var="principal"/>
 
+<style>
+    .thumbnail {
+        width: 50px;
+    }
+</style>
+
 <div class="container">
     <div class="row">
         <div class="col py-3 mb-4 border-bottom">
@@ -141,9 +147,8 @@
 
                 str +=
                     "<input type='hidden' name='attachList[" + i + "].fileName' value='" + targetFile.data("filename") + "'>" +
-                    "<input type='hidden' name='attachList[" + i + "].uuid' value='" + targetFile.data("uuid") + "'>" +
-                    "<input type='hidden' name='attachList[" + i + "].uploadPath' value='" + targetFile.data("path") + "'>" +
-                    "<input type='hidden' name='attachList[" + i + "].fileType' value='" + targetFile.data("type") + "'>";
+                    "<input type='hidden' name='attachList[" + i + "].fileUrl' value='" + targetFile.data("fileurl") + "'>" +
+                    "<input type='hidden' name='attachList[" + i + "].image' value='" + targetFile.data("image") + "'>";
                 fileIndex++;
             })
 
@@ -152,9 +157,8 @@
 
                 str +=
                     "<input type='hidden' name='attachList[" + (i + fileIndex) + "].fileName' value='" + targetFile.data("filename") + "'>" +
-                    "<input type='hidden' name='attachList[" + (i + fileIndex) + "].uuid' value='" + targetFile.data("uuid") + "'>" +
-                    "<input type='hidden' name='attachList[" + (i + fileIndex) + "].uploadPath' value='" + targetFile.data("path") + "'>" +
-                    "<input type='hidden' name='attachList[" + (i + fileIndex) + "].fileType' value='" + targetFile.data("type") + "'>";
+                    "<input type='hidden' name='attachList[" + (i + fileIndex) + "].fileUrl' value='" + targetFile.data("fileurl") + "'>" +
+                    "<input type='hidden' name='attachList[" + (i + fileIndex) + "].image' value='" + targetFile.data("image") + "'>";
             });
             modifyForm.append(str).submit();
         });
@@ -195,40 +199,37 @@
 
     //첨부파일 목록 가져오기
     $.getJSON("/board/getAttachList", {postNo: postNo}, function (result) {
-        let fileCallPath;
         let str = "";
 
         $(result).each(function (i, file) {
-            if (file.fileType) {
-                fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);
+            if (file.image) {
 
                 str +=
-                    "<li class='nav align-items-center' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-filename='" + file.fileName + "' data-type='" + file.fileType + "'>" +
+                    "<li class='nav align-items-center' data-fileurl='" + file.fileUrl + "' data-filename='" + file.fileName + "' data-image='" + file.image + "'>" +
                     "   <div class='col-1'>" +
-                    "       <img src='/showImage?fileName=" + fileCallPath + "'>" +
+                    "       <img class='thumbnail' src='" + file.fileUrl + "'>" +
                     "   </div>" +
                     "   <div class='col-1'>" +
-                    "       <button type='button' data-file=\'" + fileCallPath + "\' data-type='image' class='btn btn-warning btn-circle'>" +
+                    "       <button type='button' class='btn btn-warning btn-circle'>" +
                     "           <i class='fa fa-times'></i>" +
                     "       </button>" +
                     "   </div>" +
-                    "   <div class='col-10'>" +
+                    "   <div class='col-11'>" +
                     "       <span>" + file.fileName + "</span>" +
                     "   </div>" +
                     "</li>"
             } else {
-                fileCallPath = encodeURIComponent(file.uploadPath + "/" + file.uuid + "_" + file.fileName);
                 str +=
-                    "<li class='nav align-items-center' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-filename='" + file.fileName + "' data-type='" + file.fileType + "'>" +
+                    "<li class='nav align-items-center' data-fileurl='" + file.fileUrl + "' data-filename='" + file.fileName + "' data-image='" + file.image + "'>" +
                     "   <div class='col-1'>" +
-                    "       <img src='/resources/img/attach.png' style='width: 100px'>" +
+                    "       <img class='thumbnail' src='/resources/img/attach.png'>" +
                     "   </div>" +
                     "   <div class='col-1'>" +
-                    "       <button type='button' data-file=\'" + fileCallPath + "\' data-type='file' class='btn btn-warning btn-circle'>" +
+                    "       <button type='button' class='btn btn-warning btn-circle'>" +
                     "           <i class='fa fa-times'></i>" +
                     "       </button>" +
                     "   </div>" +
-                    "   <div class='col-10'>" +
+                    "   <div class='col-11'>" +
                     "       <span>" + file.fileName + "</span>" +
                     "   </div>" +
                     "</li>"
@@ -260,20 +261,17 @@
     function showUploadResult(result) {
         if (!result || result.length === 0) return;
 
-        let fileCallPath;
         let str = "";
 
         $(result).each(function (i, file) {
             if (file.image) {
-                fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);
-
                 str +=
-                    "<li class='nav align-items-center' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-filename='" + file.fileName + "' data-type='" + file.image + "'>" +
+                    "<li class='nav align-items-center' data-fileurl='" + file.fileUrl + "' data-filename='" + file.fileName + "' data-image='" + file.image + "'>" +
                     "   <div class='col-1'>" +
-                    "       <img src='/showImage?fileName=" + fileCallPath + "'>" +
+                    "       <img class='thumbnail' src='" + file.fileUrl + "'>" +
                     "   </div>" +
                     "   <div class='col-1'>" +
-                    "       <button type='button' data-file=\'" + fileCallPath + "\' data-type='image' class='btn btn-warning btn-circle'>" +
+                    "       <button type='button' class='btn btn-warning btn-circle'>" +
                     "           <i class='fa fa-times'></i>" +
                     "       </button>" +
                     "   </div>" +
@@ -282,14 +280,13 @@
                     "   </div>" +
                     "</li>"
             } else {
-                fileCallPath = encodeURIComponent(file.uploadPath + "/" + file.uuid + "_" + file.fileName);
                 str +=
-                    "<li class='nav  align-items-center' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-filename='" + file.fileName + "' data-type='" + file.image + "'>" +
+                    "<li class='nav  align-items-center' data-fileurl='" + file.fileUrl + "' data-filename='" + file.fileName + "' data-image='" + file.image + "'>" +
                     "   <div class='col-1'>" +
-                    "       <img src='/resources/img/attach.png' style='width: 100px'>" +
+                    "       <img class='thumbnail' src='/resources/img/attach.png'>" +
                     "   </div>" +
                     "   <div class='col-1'>" +
-                    "       <button type='button' data-file=\'" + fileCallPath + "\' data-type='file' class='btn btn-warning btn-circle'>" +
+                    "       <button type='button' class='btn btn-warning btn-circle'>" +
                     "           <i class='fa fa-times'></i>" +
                     "       </button>" +
                     "   </div>" +
@@ -306,7 +303,6 @@
     $("#fileUpload").change(function () {
         let uploadForm = new FormData;
         let files = $(this)[0].files;
-        console.log(files);
 
         for (let i = 0; i < files.length; i++) {
             if (!checkExtension(files[i].size)) {
@@ -340,7 +336,7 @@
         $.ajax({
             url: "/deleteFileAjax",
             type: "POST",
-            data: {fileName: $(this).data("file"), type: $(this).data("type")},
+            data: {fileUrl: targetLi.data("fileurl")},
             dataType: "text",
 
             beforeSend: function (xhr) {
