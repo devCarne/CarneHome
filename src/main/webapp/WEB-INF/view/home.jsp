@@ -75,7 +75,7 @@
 
         <h2 class="pb-2 mt-5 border-bottom">사용된 기술</h2>
 
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4 py-5">
             <div class="col d-flex align-items-center">
                 <img class="icons" src="<c:url value='/resources/img/springBoot.png'/>">
                 <div>
@@ -91,7 +91,25 @@
             <div class="col d-flex align-items-center">
                 <img class="icons" src="<c:url value='/resources/img/aws.png'/>">
                 <div>
-                    <h4 class="fw-bold">AWS EC2, RDS</h4>
+                    <h4 class="fw-bold">AWS</h4>
+                </div>
+            </div>
+            <div class="col d-flex align-items-center">
+                <img class="icons" src="<c:url value='/resources/img/ec2.png'/>">
+                <div>
+                    <h4 class="fw-bold">EC2</h4>
+                </div>
+            </div>
+            <div class="col d-flex align-items-center">
+                <img class="icons" src="<c:url value='/resources/img/rds.png'/>">
+                <div>
+                    <h4 class="fw-bold">RDS</h4>
+                </div>
+            </div>
+            <div class="col d-flex align-items-center">
+                <img class="icons" src="<c:url value='/resources/img/s3.png'/>">
+                <div>
+                    <h4 class="fw-bold">S3</h4>
                 </div>
             </div>
             <div class="col d-flex align-items-center">
@@ -124,10 +142,6 @@
                     <h4 class="fw-bold">.JSP</h4>
                 </div>
             </div>
-            <div class="col d-flex align-items-center">
-                <div>
-                </div>
-            </div>
 
             <div class="col d-flex align-items-center">
                 <img class="icons" src="<c:url value='/resources/img/bootstrap.png'/>">
@@ -139,10 +153,6 @@
                 <img class="icons" src="<c:url value='/resources/img/git.png'/>">
                 <div>
                     <h4 class="fw-bold">git</h4>
-                </div>
-            </div>
-            <div class="col d-flex align-items-center">
-                <div>
                 </div>
             </div>
         </div>
