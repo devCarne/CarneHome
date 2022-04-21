@@ -30,7 +30,7 @@ public class ReplyController {
     public ResponseEntity<Map> list(@AuthenticationPrincipal CustomUser user, Long postNo, int replyPage) {
         log.info("reply.list() : " + postNo + ";" + replyPage);
 
-        PageVO pageVO = new PageVO(replyPage, 50);
+        PageVO pageVO = new PageVO(replyPage, 20);
         pageVO.setOffset();
         PageDTO pageDTO = new PageDTO(pageVO, service.getReplyCount(postNo));
 

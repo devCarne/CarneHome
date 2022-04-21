@@ -11,7 +11,6 @@ import stu.kms.carnehome.domain.PostVO;
 import stu.kms.carnehome.mapper.AttachMapper;
 import stu.kms.carnehome.mapper.PostMapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -41,6 +40,14 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public PostVO getPost(Long postNo) {
+        PostVO post = mapper.getPost(postNo);
+        post.setContent(post.getContent().replace("\n", "<br>"));
+
+        return post;
+    }
+
+    @Override
+    public PostVO getPost_modify(Long postNo) {
         return mapper.getPost(postNo);
     }
 

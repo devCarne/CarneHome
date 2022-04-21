@@ -22,7 +22,7 @@
                         <li><a href="/activity" class="nav-link px-2 text-white">대외활동</a></li>
                         <li><a href="#" class="nav-link px-2 text-white">채팅(구현 중)</a></li>
                         <li class="dropdown">
-                            <a href="#" class="nav-link px-2 text-white dropdown-toggle"  role="button" data-toggle="dropdown" aria-haspopup="true">연락처(클릭 시 복사)</a>
+                            <a href="#" class="nav-link px-2 text-white dropdown-toggle"  role="button" data-toggle="dropdown" aria-haspopup="true">연락처</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item dropdown-phone" style="color: black" href="#">전화번호: 010-2078-1158</a>
                                 <a class="dropdown-item dropdown-email" style="color: black" href="#">이메일: kms74568@naver.com</a>

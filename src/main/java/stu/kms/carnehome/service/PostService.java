@@ -16,6 +16,8 @@ public interface PostService {
 
     PostVO getPost(Long postNo);
 
+    PostVO getPost_modify(Long postNo);
+
     boolean modify(PostVO post);
 
     boolean delete(Long postNo);

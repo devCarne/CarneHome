@@ -62,7 +62,7 @@ public class BoardController {
     public void modify(Long postNo, PageVO pageVO, Model model) {
         log.info("modify() : " + postNo + ", " + pageVO);
 
-        PostVO post = service.getPost(postNo);
+        PostVO post = service.getPost_modify(postNo);
         model.addAttribute("post", post);
     }
 
