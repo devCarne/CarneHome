@@ -232,12 +232,6 @@
 <script>
     $(document).ready(function () {
 
-        if (self.name !== 'reload') {
-            self.name = 'reload';
-            self.location.reload(true);
-        }
-        else self.name = '';
-
         let pageVOForm = $("#PageVOForm");
         //게시물 조회 처리
         $(".post-link").on("click", function (e) {
