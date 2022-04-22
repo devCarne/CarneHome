@@ -42,10 +42,11 @@
                 <p id="valid" class="alert alert-danger">${exception}</p>
               </c:if>
               <!-- Change this to a button or input when using this as a form -->
-              <button class="btn w-100 btn-lg btn-success btn-block">Login</button>
+              <button class="btn btnSignIn w-100 btn-lg btn-success btn-block">Login</button>
             </fieldset>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
           </form>
+          <button class="btn btnSignUp w-100 btn-lg btn-primary btn-block">회원가입</button>
         </div>
       </div>
     </div>
@@ -55,9 +56,13 @@
 <!-- jQuery -->
 
 <script>
-  $(".btn-success").on("click", function (e) {
+  $(".btnSignIn").on("click", function (e) {
     e.preventDefault();
     $("form").submit();
+  });
+
+  $(".btnSignUp").on("click", function (e) {
+    location.href = "/signUp";
   });
 </script>
 </body>

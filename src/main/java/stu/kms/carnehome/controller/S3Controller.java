@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import stu.kms.carnehome.domain.AttachFileDTO;
 import stu.kms.carnehome.service.S3Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -53,6 +54,7 @@ public class S3Controller {
 
     @GetMapping("/download")
     public ResponseEntity<ByteArrayResource> download(String fileUrl, String fileName) {
+        log.info("download() : " + fileUrl + ";" + fileName);
         byte[] fileData = s3Service.download(fileUrl);
         ByteArrayResource resource = new ByteArrayResource(fileData);
 
@@ -60,7 +62,7 @@ public class S3Controller {
         headers.setContentLength(fileData.length);
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 
-        ContentDisposition contentDisposition = ContentDisposition.builder("inline").filename(fileName).build();
+        ContentDisposition contentDisposition = ContentDisposition.builder("attachment").filename(fileName, StandardCharsets.UTF_8).build();
         headers.setContentDisposition(contentDisposition);
 
         return ResponseEntity

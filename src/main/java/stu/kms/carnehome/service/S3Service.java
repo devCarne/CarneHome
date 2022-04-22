@@ -63,7 +63,6 @@ public class S3Service {
         fileUrl = URLDecoder.decode(fileUrl, StandardCharsets.UTF_8);
         String key = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
 
-        log.info(key);
         S3Object s3Object = amazonS3Client.getObject(bucketName, key);
         S3ObjectInputStream inputStream = s3Object.getObjectContent();
 
