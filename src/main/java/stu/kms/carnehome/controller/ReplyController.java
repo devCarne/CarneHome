@@ -28,7 +28,7 @@ public class ReplyController {
 
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map> list(@AuthenticationPrincipal CustomUser user, Long postNo, int replyPage) {
-        log.info("reply.list() : " + postNo + ";" + replyPage);
+        log.info("reply.list() : " + user + ";" + postNo + ";" + replyPage);
 
         PageVO pageVO = new PageVO(replyPage, 20);
         pageVO.setOffset();
@@ -37,7 +37,11 @@ public class ReplyController {
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("replyList", service.list(postNo, pageVO));
         resultMap.put("pageDTO", pageDTO);
-        resultMap.put("userName", user.getMember().getUsername());
+        if (user == null) {
+            resultMap.put("userName", null);
+        } else {
+            resultMap.put("userName", user.getMember().getUsername());
+        }
 
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }

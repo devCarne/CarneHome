@@ -59,6 +59,7 @@ public class BoardController {
     }
 
     @GetMapping("/modify")
+    @PreAuthorize("isAuthenticated()")
     public void modify(Long postNo, PageVO pageVO, Model model) {
         log.info("modify() : " + postNo + ", " + pageVO);
 
@@ -67,6 +68,7 @@ public class BoardController {
     }
 
     @PostMapping("/modify")
+    @PreAuthorize("isAuthenticated()")
     public String modify(@AuthenticationPrincipal CustomUser user, PostVO post, PageVO pageVO, RedirectAttributes redirectAttributes) {
         log.info("modify() : " + user + ";" + post + ";" + pageVO);
 
@@ -81,6 +83,7 @@ public class BoardController {
     }
 
     @PostMapping("/delete")
+    @PreAuthorize("isAuthenticated()")
     public String delete(Long postNo, PageVO pageVO, RedirectAttributes redirectAttributes) {
         log.info("delete() : " + postNo + ";" + pageVO + ";");
 

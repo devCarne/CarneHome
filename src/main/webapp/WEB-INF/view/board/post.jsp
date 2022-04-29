@@ -134,15 +134,6 @@
             <h4 class="mb40"><i class="fa fa-comment"></i> 댓글</h4>
 
             <ul class="replyResult">
-                <li>
-                    <h5 class="bg-light">
-                        <i class="fa fa-user"></i>aaa
-                        <button class="btn btn-sm btn-outline-secondary" type="button">수정</button>
-                        <button class="btn btn-sm btn-outline-danger" type="button">삭제</button>
-                        <p class="pull-right text-muted">001133</p>
-                    </h5>
-                    <p>댓글내용</p>
-                </li>
             </ul>
         </div>
     </div>
@@ -164,31 +155,42 @@
         </div>
     </div>
 
-    <form>
-        <div class="row align-items-baseline">
-            <label for="userName" class="col-sm-1 form-label">작성자</label>
-            <div class="col-10">
-                <input type="text" class="form-control input-userName" id="userName"
-                       value="${principal.member.username}" readonly>
+    <sec:authorize access="isAuthenticated()">
+        <form>
+            <div class="row align-items-baseline">
+                <label for="userName" class="col-sm-1 form-label">작성자</label>
+                <div class="col-10">
+                    <input type="text" class="form-control input-userName" id="userName"
+                           value="${principal.member.username}" readonly>
+                </div>
+                <div class="col-1">
+                    <button type="button" class="btn-reply btn btn-primary">등록</button>
+                </div>
             </div>
-            <div class="col-1">
-                <button type="button" class="btn-reply btn btn-primary">등록</button>
+
+            <div class="row align-items-baseline">
+                <label for="replyContent" class="col-sm-1 form-label">내용</label>
+                <div class="col-10">
+            <textarea class="form-control input-replyContent" id="replyContent" rows="6" maxlength="1000"
+                      style="resize: none" required></textarea>
+                </div>
+                <div class="col-1">
+                    <p class="replyContentCount">0/1000자</p>
+                </div>
+            </div>
+        </form>
+    </sec:authorize>
+
+    <sec:authorize access="isAnonymous()">
+        <div class="row">
+            <div class="col">
+                <h4>댓글을 작성하려면 로그인해야 합니다.</h4>
+
             </div>
         </div>
+    </sec:authorize>
 
-        <div class="row align-items-baseline">
-            <label for="replyContent" class="col-sm-1 form-label">내용</label>
-            <div class="col-10">
-                <textarea class="form-control input-replyContent" id="replyContent" rows="6" maxlength="1000"
-                          style="resize: none" required></textarea>
-            </div>
-            <div class="col-1">
-                <p class="replyContentCount">0/1000자</p>
-            </div>
-        </div>
-    </form>
-
-    <div class="row">
+    <div class="row mb-5">
         <div class="col text-center">
             <button class="list-btn btn btn-secondary">목록으로</button>
         </div>

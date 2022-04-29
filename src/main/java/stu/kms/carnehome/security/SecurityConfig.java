@@ -66,7 +66,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/*").permitAll()
-                .antMatchers("/board/*").hasAuthority("NORMAL");
+                .antMatchers("/board/list/*").permitAll()
+                .antMatchers("/board/post/*").permitAll()
+                .antMatchers("/board/modify/*").hasAuthority("NORMAL")
+                .antMatchers("/board/write/*").hasAuthority("NORMAL")
+                .antMatchers("/board/delete/*").hasAuthority("NORMAL");
+
 
 
         http.formLogin()
