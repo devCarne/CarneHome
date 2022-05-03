@@ -149,6 +149,7 @@
                             value="${pageDTO.pageVO.searchType == 'U'?'selected':''}"/>>작성자
                     </option>
                 </select>
+                <input type="hidden" id="searchAmountPerPage" name="amountPerPage" value="">
             </div>
 
             <div class="col-6">
@@ -158,13 +159,13 @@
             </div>
 
             <div class="col-1">
-                <input class="btn btn-secondary" type="submit" onclick="return submitCheck()"
+                <input class="btn btn-secondary btnSearch" type="submit" onclick="return submitCheck()"
                        value="검색">
             </div>
 
             <div class="col-1">
                 <button class="write-btn btn btn-primary" type="button">글쓰기</button>
-           </div>
+            </div>
         </div>
     </form>
     <%--검색창--%>
@@ -217,20 +218,36 @@
             </div>
         </div>
     </div>
-    <%--모달--%>
+        <%--모달--%>
 
-    <%--PageVO 정보 전달 히든 폼--%>
-    <form id="PageVOForm" action="/board/list" method="get">
-        <input type="hidden" id="pageNum" name="pageNum" value="${pageDTO.pageVO.pageNum}">
-        <input type="hidden" name="amountPerPage" value="${pageDTO.pageVO.amountPerPage}">
-        <input type="hidden" name="searchType" value="${pageDTO.pageVO.searchType}">
-        <input type="hidden" name="keyword" value="${pageDTO.pageVO.keyword}">
-    </form>
-    <%--PageVO 정보 전달 히든 폼--%>
+        <%--PageVO 정보 전달 히든 폼--%>
+        <div class="row">
+            <div class="col-2">
+                <form id="PageVOForm" action="/board/list" method="get">
+                    <input type="hidden" id="pageNum" name="pageNum" value="${pageDTO.pageVO.pageNum}">
+                    <%--        <input type="hidden" name="amountPerPage" value="${pageDTO.pageVO.amountPerPage}">--%>
+                    <label for="amountPerPage">표시할 수</label>
+                    <select class="form-select" id="amountPerPage" name="amountPerPage">
+                        <option value="${pageDTO.pageVO.amountPerPage}">현재 : ${pageDTO.pageVO.amountPerPage}개</option>
+                        <option value="10">10개</option>
+                        <option value="20">20개</option>
+                        <option value="50">50개</option>
+                    </select>
+                    <input type="hidden" name="searchType" value="${pageDTO.pageVO.searchType}">
+                    <input type="hidden" name="keyword" value="${pageDTO.pageVO.keyword}">
+                </form>
+                <%--PageVO 정보 전달 히든 폼--%>
+            </div>
+        </div>
+    </div>
 </body>
 
 <script>
     $(document).ready(function () {
+
+        $(".btnSearch").on("click", function () {
+            $("#searchAmountPerPage").val($("#amountPerPage").val());
+        });
 
         let pageVOForm = $("#PageVOForm");
         //게시물 조회 처리
